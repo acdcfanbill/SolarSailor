@@ -35,7 +35,7 @@ namespace SolarSailor
         /// <param name="x">rotation input in degrees</param>
         /// <param name="y">rotation input in degrees</param>
         /// <param name="z">rotation input in degrees</param>
-        public void Update(GameTime gameTime, float x, float y, float z)
+        public virtual void Update(GameTime gameTime, float x, float y, float z)
         {
             float secs = (float)gameTime.ElapsedGameTime.TotalSeconds;
             //change to radians
@@ -50,6 +50,8 @@ namespace SolarSailor
             float zDelta = secs * z * MathHelper.TwoPi;
             float xDelta = secs * x * MathHelper.TwoPi;
             float yDelta = secs * y * MathHelper.TwoPi;
+
+            //_rotation *= Matrix.CreateFromYawPitchRoll(zDelta, yDelta, zDelta);
 
             _rotation = Matrix.CreateRotationX(xDelta) * Matrix.CreateRotationY(yDelta) * Matrix.CreateRotationZ(zDelta) * _rotation;
 

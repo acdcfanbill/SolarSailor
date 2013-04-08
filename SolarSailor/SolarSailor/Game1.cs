@@ -20,7 +20,7 @@ namespace SolarSailor
         SpriteBatch spriteBatch;
 
         ModelManager modelManager;
-        public Camera camera;
+        public static Camera camera;
 
         public Game1()
         {
@@ -38,7 +38,7 @@ namespace SolarSailor
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            camera = new Camera(this, new Vector3(5, 5, 10), Vector3.Zero, Vector3.Up, 90);
+            camera = new Camera(this, new Vector3(5, -5, 15), Vector3.Zero, Vector3.Up, 60);
             Components.Add(camera);
             modelManager = new ModelManager(this);
             Components.Add(modelManager);
@@ -88,10 +88,10 @@ namespace SolarSailor
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            //GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            //GraphicsDevice.BlendState = BlendState.Opaque;
-            //GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            //GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             // TODO: Add your drawing code here
 

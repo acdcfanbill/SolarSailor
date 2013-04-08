@@ -22,7 +22,7 @@ namespace SolarSailor
         //Camera matricies
         public Matrix view { get; protected set; }
         public Matrix projection { get; protected set; }
-        Vector3 _pos;
+        public Vector3 _pos {get; set; }
         public Vector3 _target { get; set; }
         public Vector3 _up { get; set; }
 
@@ -58,9 +58,22 @@ namespace SolarSailor
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
+            //create a new view matrix each frame.  depends on any updated position,
+            //target and up direciton.
             view = Matrix.CreateLookAt(_pos, _target, _up);
             base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// Called up update the camera for each frame.  pass in camera position and target
+        /// position as well as the 'up' vector for the camera
+        /// </summary>
+        /// <param name="pos">Vector3 camera position</param>
+        /// <param name="target">Vector3 target for camera to look at</param>
+        /// <param name="up">Vector3 pointing up for camera</param>
+        public void UpdateCamera(Vector3 pos, Vector3 target, Vector3 up)
+        {
+            _pos = pos; _target = target; _up = up;
         }
     }
 }

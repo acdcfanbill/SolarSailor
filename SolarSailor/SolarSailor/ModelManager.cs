@@ -20,6 +20,8 @@ namespace SolarSailor
         List<BasicModel> models = new List<BasicModel>();
         KeyboardState keyboardState;
         KeyboardState oldKeyboardState;
+        MouseState mouseState;
+        MouseState oldMouseState;
 
         float x = 0f;
         float y = 0f;
@@ -44,7 +46,8 @@ namespace SolarSailor
 
         protected override void LoadContent()
         {
-            models.Add(new RotateableModel(Game.Content.Load<Model>(@"models/cube")));
+            //models.Add(new RotateableModel(Game.Content.Load<Model>(@"models/cube")));
+            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 50, 50, 50));
 
             base.LoadContent();
         }
@@ -57,48 +60,11 @@ namespace SolarSailor
         {
             keyboardState = Keyboard.GetState();
 
-            if (!keyboardState.IsKeyDown(Keys.Z) && oldKeyboardState.IsKeyDown(Keys.Z))
-            {
-                if (z == 0f)
-                {
-                    x = 0f;
-                    y = 0f;
-                    z = .5f;
-                }
-                else
-                    z = 0f;
-            }
-            if (!keyboardState.IsKeyDown(Keys.X) && oldKeyboardState.IsKeyDown(Keys.X))
-            {
-                if (x == 0f)
-                {
-                    x = .5f;
-                    y = 0f;
-                    z = 0f;
-                }
-                else
-                    x = 0f;
-            }
-            if (!keyboardState.IsKeyDown(Keys.Y) && oldKeyboardState.IsKeyDown(Keys.Y))
-            {
-                if (y == 0f)
-                {
-                    x = 0f;
-                    y = .5f;
-                    z = 0f;
-                }
-                else
-                    y = 0f;
-            }
+            getMouseInput(ref x, ref y, ref z);
 
-            if (!keyboardState.IsKeyDown(Keys.S) && oldKeyboardState.IsKeyDown(Keys.S))
+            foreach (UserShip m in models)
             {
-                x = 0f; y = 0f; z = 0f;
-            }
-
-            foreach (RotateableModel m in models)
-            {
-                m.Update(gameTime, x, y, z);
+                m.Update(gameTime, x, y, z,1f);
                 //m.Update();
             }
 
@@ -109,12 +75,30 @@ namespace SolarSailor
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (BasicModel m in models)
+            foreach (UserShip m in models)
             {
-                m.Draw(((Game1)Game).camera);
+                m.Draw(Game1.camera);
             }
 
             base.Draw(gameTime);
+        }
+
+        private void getMouseInput(ref float x, ref float y, ref float z)
+        {
+            mouseState = Mouse.GetState();
+
+            x = mouseState.X - oldMouseState.X;
+            y = mouseState.Y - oldMouseState.Y;
+            z = mouseState.ScrollWheelValue - oldMouseState.ScrollWheelValue;
+
+            float speed = 5;
+            x *= speed; y *= speed; z *= speed/2;
+
+
+           
+            //reset mouse position
+            Mouse.SetPosition(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2);
+            oldMouseState = Mouse.GetState();
         }
     }
 }
