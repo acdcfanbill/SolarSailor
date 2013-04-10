@@ -114,7 +114,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="RotateableModel.cs" />
-    <Compile Include="ThirdPersonCamera.cs" />
     <Compile Include="UserShip.cs" />
   </ItemGroup>
   <ItemGroup>

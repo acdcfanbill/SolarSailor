@@ -48,28 +48,30 @@ namespace SolarSailor
 
             float xDelta = secs * inputXDeg; float yDelta = secs * inputYDeg; float zDelta = secs * inputZDeg;
 
-            Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, -1), xDelta) * Quaternion.CreateFromAxisAngle(new Vector3(-1, 0, 0), yDelta) * Quaternion.CreateFromAxisAngle(new Vector3(0,-1,0), zDelta);
+            //Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(-1,0,0) , xDelta) * Quaternion.CreateFromAxisAngle(new Vector3(0, -1, 0), yDelta) * Quaternion.CreateFromAxisAngle(new Vector3(0,0,-1), zDelta);
+            Matrix temp = Matrix.CreateFromQuaternion(shipRotation);
+            Quaternion additionalRot = Quaternion.CreateFromAxisAngle(temp.Left, xDelta) * Quaternion.CreateFromAxisAngle(temp.Forward, yDelta) * Quaternion.CreateFromAxisAngle(temp.Up, zDelta);
             shipRotation *= additionalRot;
             float moveSpeed = secs * throttlePercent * maxSpeed;
             MoveForward(ref position, shipRotation, moveSpeed);
 
-            Game1.camera.Rotate(xDelta, zDelta);
-            Game1.camera.LookAt(this.position);
-            Game1.camera.Update(gameTime);
+            //Game1.camera.Rotate(xDelta, zDelta);
+            //Game1.camera.LookAt(this.position);
+            //Game1.camera.Update(gameTime);
             //UpdateCamera();
             
         }
 
-        //private void UpdateCamera()
-        //{
-        //    Vector3 campos = new Vector3(0, 25, 0);// Game1.camera._pos - position;
-        //    campos = Vector3.Transform(campos, Matrix.CreateFromQuaternion(shipRotation));
-        //    campos += position;
+        private void UpdateCamera()
+        {
+            Vector3 campos = new Vector3(0, 25, 0);// Game1.camera._pos - position;
+            campos = Vector3.Transform(campos, Matrix.CreateFromQuaternion(shipRotation));
+            campos += position;
 
-        //    Vector3 camup = new Vector3(0, 1, 0);
-        //    camup = Vector3.Transform(camup, Matrix.CreateFromQuaternion(shipRotation));
-        //    Game1.camera.UpdateCamera(campos, this.position, camup);
-        //}
+            Vector3 camup = new Vector3(0, 1, 0);
+            camup = Vector3.Transform(camup, Matrix.CreateFromQuaternion(shipRotation));
+            Game1.camera.UpdateCamera(campos, this.position, camup);
+        }
         //temp keyboard controls
         //private void ProcessKeyboard(GameTime gameTime)
         //{
@@ -101,7 +103,7 @@ namespace SolarSailor
         /// <param name="forwardSpeed"></param>
         private void MoveForward(ref Vector3 position, Quaternion rotationQuat, float forwardSpeed)
         {
-            Vector3 addVector = Vector3.Transform(new Vector3(0, -1, 0), rotationQuat);
+            Vector3 addVector = Vector3.Transform(new Vector3(-1, 0, 0), rotationQuat);
             position += addVector * forwardSpeed;
         }
 
@@ -110,7 +112,7 @@ namespace SolarSailor
         //    return translation;
         //}
 
-        public override void Draw(ThirdPersonCamera camera)
+        public override void Draw(Camera camera)
         {
             Matrix worldMatrix = Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateFromQuaternion(shipRotation) * Matrix.CreateTranslation(position);
  
@@ -122,9 +124,9 @@ namespace SolarSailor
                  {
                      be.EnableDefaultLighting();
                      be.PreferPerPixelLighting = true;
-                     be.Projection = camera.ProjectionMatrix;
-                     be.View = camera.ViewMatrix;
-                     be.World = worldMatrix * mesh.ParentBone.Transform;
+                     be.Projection = camera.projection;
+                     be.View = camera.view;
+                     be.World = mesh.ParentBone.Transform * worldMatrix;
                  }
                  mesh.Draw();
              }

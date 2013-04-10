@@ -22,7 +22,7 @@ namespace SolarSailor
 
         }
 
-        public virtual void Draw(ThirdPersonCamera camera)
+        public virtual void Draw(Camera camera)
         {
             Matrix[] transforms = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -33,8 +33,8 @@ namespace SolarSailor
                 {
                     be.EnableDefaultLighting();
                     be.PreferPerPixelLighting = true;
-                    be.Projection = camera.ProjectionMatrix;
-                    be.View = camera.ViewMatrix;
+                    be.Projection = camera.projection;
+                    be.View = camera.view;
                     be.World =  mesh.ParentBone.Transform * GetWorld();
                 }
 
