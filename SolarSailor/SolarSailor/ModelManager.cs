@@ -26,6 +26,7 @@ namespace SolarSailor
         float x = 0f;
         float y = 0f;
         float z = 0f;
+        float throttlePercent;
 
         public ModelManager(Game game)
             : base(game)
@@ -39,7 +40,7 @@ namespace SolarSailor
         /// </summary>
         public override void Initialize()
         {
-            // TODO: Add your initialization code here
+            throttlePercent = 0.0f;
 
             base.Initialize();
         }
@@ -47,7 +48,7 @@ namespace SolarSailor
         protected override void LoadContent()
         {
             //models.Add(new RotateableModel(Game.Content.Load<Model>(@"models/cube")));
-            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 50, 50, 50));
+            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1f, 1f, 1f));
 
             base.LoadContent();
         }
@@ -60,11 +61,17 @@ namespace SolarSailor
         {
             keyboardState = Keyboard.GetState();
 
+            //this is to figure out how much to move the ship/camera
             getMouseInput(ref x, ref y, ref z);
+
+            if (keyboardState.IsKeyUp(Keys.Add) && oldKeyboardState.IsKeyDown(Keys.Add))
+                throttlePercent = Math.Min(throttlePercent + .1f, 1.0f);
+            if (keyboardState.IsKeyUp(Keys.Subtract) && oldKeyboardState.IsKeyDown(Keys.Subtract))
+                throttlePercent = Math.Max(throttlePercent - .1f, 0.0f);
 
             foreach (UserShip m in models)
             {
-                m.Update(gameTime, x, y, z,1f);
+                m.Update(gameTime, x, y, z, .01f);
                 //m.Update();
             }
 
@@ -91,11 +98,10 @@ namespace SolarSailor
             y = mouseState.Y - oldMouseState.Y;
             z = mouseState.ScrollWheelValue - oldMouseState.ScrollWheelValue;
 
+            //speed adjust
             float speed = 5;
-            x *= speed; y *= speed; z *= speed/2;
+            x *= speed; y *= speed; z *= speed;
 
-
-           
             //reset mouse position
             Mouse.SetPosition(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2);
             oldMouseState = Mouse.GetState();

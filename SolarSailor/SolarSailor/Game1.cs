@@ -20,7 +20,7 @@ namespace SolarSailor
         SpriteBatch spriteBatch;
 
         ModelManager modelManager;
-        public static Camera camera;
+        public static ThirdPersonCamera camera;
 
         public Game1()
         {
@@ -38,8 +38,15 @@ namespace SolarSailor
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            camera = new Camera(this, new Vector3(5, -5, 15), Vector3.Zero, Vector3.Up, 60);
-            Components.Add(camera);
+            //camera = new Camera(this, new Vector3(5, -5, 15), Vector3.Zero, Vector3.Up, 60);
+            //Components.Add(camera);
+
+            camera = new ThirdPersonCamera();
+            camera.Perspective(90, (float)GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height,
+                1.0f, 3000.0f);
+            camera.LookAt(new Vector3(-15f, 10f, 0f),
+                Vector3.Zero, Vector3.Up);
+
             modelManager = new ModelManager(this);
             Components.Add(modelManager);
 

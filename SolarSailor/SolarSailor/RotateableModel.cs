@@ -42,10 +42,16 @@ namespace SolarSailor
             z = MathHelper.ToRadians(z); x = MathHelper.ToRadians(x); y = MathHelper.ToRadians(y);
             if (z > _maxZRad)
                 z = _maxZRad;
+            if (z < -_maxZRad)
+                z = -_maxZRad;
             if (x > _maxXRad)
                 x = _maxXRad;
+            if (x < -_maxXRad)
+                x = -_maxXRad;
             if (y > _maxYRad)
                 y = _maxYRad;
+            if (y < -_maxYRad)
+                y = -_maxYRad;
 
             float zDelta = secs * z * MathHelper.TwoPi;
             float xDelta = secs * x * MathHelper.TwoPi;

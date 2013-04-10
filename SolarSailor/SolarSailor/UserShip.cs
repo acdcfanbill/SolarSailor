@@ -14,16 +14,6 @@ namespace SolarSailor
 {
     class UserShip : BasicModel
     {
-        //going to store velocity as Forward/Back,Left/Right,Up/Down
-        //the Update should also reduce the Left/Right and Up/Down velocity over time so the ship
-        //tries to fly true.
-        //Matrix rotation = Matrix.Identity;
-        //Matrix translation = Matrix.Identity;
-        //Vector3 velocity = Vector3.Zero;
-        //Vector3 position = Vector3.Zero;
-
-        //Matrix localWorld;
-
 
         //=================================================================
 
@@ -35,6 +25,9 @@ namespace SolarSailor
         //need a maximum turn speed for the ship
         float _maxXRad, _maxYRad, _maxZRad;
 
+        //max speed for the ship
+        float maxSpeed = 50;
+
         float secs;
 
         public UserShip(Model m, float maxXRad, float maxYRad, float maxZRad)
@@ -44,40 +37,39 @@ namespace SolarSailor
             this._maxXRad = maxXRad; this._maxYRad = maxYRad; this._maxZRad = maxZRad;
         }
 
-        public void Update(GameTime gameTime, float inputXDeg, float inputYDeg, float inputZDeg, float fwdInput)
+        public void Update(GameTime gameTime, float inputXDeg, float inputYDeg, float inputZDeg, float throttlePercent)
         {
             secs = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             //change to radians
             inputZDeg = MathHelper.ToRadians(inputZDeg); inputXDeg = MathHelper.ToRadians(inputXDeg); inputYDeg = MathHelper.ToRadians(inputYDeg);
-            if (inputZDeg > _maxZRad)
-                inputZDeg  = _maxZRad;
-            if (inputXDeg > _maxXRad)
-                inputXDeg = _maxXRad;
-            if (inputYDeg > _maxYRad)
-                inputYDeg = _maxYRad;
+            //clamp rotation speed depending on the ship
+            ClampRotation(ref inputXDeg, ref inputYDeg, ref inputZDeg);
 
             float xDelta = secs * inputXDeg; float yDelta = secs * inputYDeg; float zDelta = secs * inputZDeg;
 
             Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, -1), xDelta) * Quaternion.CreateFromAxisAngle(new Vector3(-1, 0, 0), yDelta) * Quaternion.CreateFromAxisAngle(new Vector3(0,-1,0), zDelta);
             shipRotation *= additionalRot;
-            float moveSpeed = gameTime.ElapsedGameTime.Milliseconds / 500.0f * fwdInput;
+            float moveSpeed = secs * throttlePercent * maxSpeed;
             MoveForward(ref position, shipRotation, moveSpeed);
 
+            Game1.camera.Rotate(xDelta, zDelta);
+            Game1.camera.LookAt(this.position);
+            Game1.camera.Update(gameTime);
             //UpdateCamera();
             
         }
 
-        private void UpdateCamera()
-        {
-            Vector3 campos = new Vector3(0, 25, 0);// Game1.camera._pos - position;
-            campos = Vector3.Transform(campos, Matrix.CreateFromQuaternion(shipRotation));
-            campos += position;
+        //private void UpdateCamera()
+        //{
+        //    Vector3 campos = new Vector3(0, 25, 0);// Game1.camera._pos - position;
+        //    campos = Vector3.Transform(campos, Matrix.CreateFromQuaternion(shipRotation));
+        //    campos += position;
 
-            Vector3 camup = new Vector3(0, 1, 0);
-            camup = Vector3.Transform(camup, Matrix.CreateFromQuaternion(shipRotation));
-            Game1.camera.UpdateCamera(campos, this.position, camup);
-        }
+        //    Vector3 camup = new Vector3(0, 1, 0);
+        //    camup = Vector3.Transform(camup, Matrix.CreateFromQuaternion(shipRotation));
+        //    Game1.camera.UpdateCamera(campos, this.position, camup);
+        //}
         //temp keyboard controls
         //private void ProcessKeyboard(GameTime gameTime)
         //{
@@ -106,11 +98,11 @@ namespace SolarSailor
         /// </summary>
         /// <param name="position"></param>
         /// <param name="rotationQuat"></param>
-        /// <param name="speed"></param>
-        private void MoveForward(ref Vector3 position, Quaternion rotationQuat, float speed)
+        /// <param name="forwardSpeed"></param>
+        private void MoveForward(ref Vector3 position, Quaternion rotationQuat, float forwardSpeed)
         {
             Vector3 addVector = Vector3.Transform(new Vector3(0, -1, 0), rotationQuat);
-            position += addVector * speed;
+            position += addVector * forwardSpeed;
         }
 
         //public override Matrix GetWorld()
@@ -118,7 +110,7 @@ namespace SolarSailor
         //    return translation;
         //}
 
-        public override void Draw(Camera camera)
+        public override void Draw(ThirdPersonCamera camera)
         {
             Matrix worldMatrix = Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateFromQuaternion(shipRotation) * Matrix.CreateTranslation(position);
  
@@ -130,12 +122,28 @@ namespace SolarSailor
                  {
                      be.EnableDefaultLighting();
                      be.PreferPerPixelLighting = true;
-                     be.Projection = camera.projection;
-                     be.View = camera.view;
+                     be.Projection = camera.ProjectionMatrix;
+                     be.View = camera.ViewMatrix;
                      be.World = worldMatrix * mesh.ParentBone.Transform;
                  }
                  mesh.Draw();
              }
+        }
+
+        private void ClampRotation(ref float inputXDeg, ref float inputYDeg, ref float inputZDeg)
+        {
+            if (inputZDeg > _maxZRad)
+                inputZDeg = _maxZRad;
+            if (inputZDeg < -_maxZRad)
+                inputZDeg = -_maxZRad;
+            if (inputXDeg > _maxXRad)
+                inputXDeg = _maxXRad;
+            if (inputXDeg < -_maxXRad)
+                inputXDeg = -_maxXRad;
+            if (inputYDeg > _maxYRad)
+                inputYDeg = _maxYRad;
+            if (inputYDeg < -_maxYRad)
+                inputYDeg = -_maxYRad;
         }
     }
 }
