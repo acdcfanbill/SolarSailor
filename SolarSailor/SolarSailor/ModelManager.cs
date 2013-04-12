@@ -65,9 +65,9 @@ namespace SolarSailor
             getMouseInput(ref x, ref y, ref z);
 
             if (keyboardState.IsKeyUp(Keys.Add) && oldKeyboardState.IsKeyDown(Keys.Add))
-                throttlePercent = Math.Min(throttlePercent + .1f, 1.0f);
+                throttlePercent = Math.Min(throttlePercent + .05f, 1.0f);
             if (keyboardState.IsKeyUp(Keys.Subtract) && oldKeyboardState.IsKeyDown(Keys.Subtract))
-                throttlePercent = Math.Max(throttlePercent - .1f, 0.0f);
+                throttlePercent = Math.Max(throttlePercent - .05f, 0.0f);
 
             foreach (UserShip m in models)
             {
@@ -103,7 +103,7 @@ namespace SolarSailor
             //speed adjust
             float speed = 5;
             //Y has -speed to fix inversion issue. Personal preference I suppose?
-            x *= speed; y *= -speed; z *= speed;
+            x *= speed; y *= speed; z *= speed;
 
             //reset mouse position
             Mouse.SetPosition(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2);
