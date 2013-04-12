@@ -14,7 +14,6 @@ namespace SolarSailor
 {
     class UserShip : BasicModel
     {
-
         //=================================================================
 
         Vector3 position = Vector3.Zero;
@@ -30,7 +29,7 @@ namespace SolarSailor
         float _maxXRad, _maxYRad, _maxZRad;
 
         //max speed for the ship
-        float maxSpeed = 50;
+        float maxSpeed = 200;
 
         float secs;
 
@@ -59,6 +58,13 @@ namespace SolarSailor
             Matrix additionalRot = Matrix.CreateRotationX(zDelta) * Matrix.CreateRotationY(-xDelta) * Matrix.CreateRotationZ(-yDelta);
             shipRotation = additionalRot * shipRotation;
             float moveSpeed = secs * throttlePercent * maxSpeed;
+            //Trying to get the ship speed to increase somewhat slowly, incrementally, and smoothly
+            //Not working quite right.
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+                throttlePercent += .1f * secs;
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+                throttlePercent -= .1f * secs;
+     
             MoveForward(ref position, shipRotation, moveSpeed);
 
             //Game1.camera.Rotate(xDelta, zDelta);
@@ -111,7 +117,11 @@ namespace SolarSailor
         private void MoveForward(ref Vector3 position, Matrix rotationQuat, float forwardSpeed)
         {
             Vector3 addVector = Vector3.Transform(new Vector3(-1, 0, 0), rotationQuat);
-            position += addVector * forwardSpeed;
+            //position += addVector * forwardSpeed;
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+                position += addVector * forwardSpeed;
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+                position -= addVector * forwardSpeed;
         }
 
         //public override Matrix GetWorld()

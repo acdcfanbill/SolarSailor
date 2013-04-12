@@ -40,7 +40,7 @@ namespace SolarSailor
         /// </summary>
         public override void Initialize()
         {
-            throttlePercent = 0.0f;
+            throttlePercent = 0.1f;
 
             base.Initialize();
         }
@@ -48,7 +48,7 @@ namespace SolarSailor
         protected override void LoadContent()
         {
             //models.Add(new RotateableModel(Game.Content.Load<Model>(@"models/cube")));
-            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1f, 1f, 1f));
+            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1.5f, 1.5f, 1f));
 
             base.LoadContent();
         }
@@ -71,7 +71,7 @@ namespace SolarSailor
 
             foreach (UserShip m in models)
             {
-                m.Update(gameTime, x, y, z, .01f);
+                m.Update(gameTime, x, y, z, throttlePercent);
                 //m.Update();
             }
 
@@ -92,6 +92,8 @@ namespace SolarSailor
 
         private void getMouseInput(ref float x, ref float y, ref float z)
         {
+            //Noticed that the ship steers from the nose, rather than from
+            //the midpoint or cockpit or whatever.
             mouseState = Mouse.GetState();
 
             x = mouseState.X - oldMouseState.X;
@@ -100,7 +102,8 @@ namespace SolarSailor
 
             //speed adjust
             float speed = 5;
-            x *= speed; y *= speed; z *= speed;
+            //Y has -speed to fix inversion issue. Personal preference I suppose?
+            x *= speed; y *= -speed; z *= speed;
 
             //reset mouse position
             Mouse.SetPosition(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2);
