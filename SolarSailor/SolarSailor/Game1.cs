@@ -25,6 +25,7 @@ namespace SolarSailor
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
         }
 
@@ -46,6 +47,7 @@ namespace SolarSailor
             //    1.0f, 3000.0f);
             //camera.LookAt(new Vector3(-15f, 10f, 0f),
             //    Vector3.Zero, Vector3.Up);
+            
 
             modelManager = new ModelManager(this);
             Components.Add(modelManager);

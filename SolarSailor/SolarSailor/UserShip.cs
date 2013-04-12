@@ -18,7 +18,11 @@ namespace SolarSailor
         //=================================================================
 
         Vector3 position = Vector3.Zero;
-        Quaternion shipRotation = Quaternion.Identity;
+        Matrix shipRotation = Matrix.Identity;
+
+        float camHeading = 0; //zero is directly behind the ship, so it 360, hence it's deg
+        float camInclination = 20; //zero is directly behind the ship, also in degrees, -90 to 90
+        float camDistance = 50;  //no clue what min/max shoudl be, have to test
 
         //==================================================================
 
@@ -49,28 +53,31 @@ namespace SolarSailor
             float xDelta = secs * inputXDeg; float yDelta = secs * inputYDeg; float zDelta = secs * inputZDeg;
 
             //Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(-1,0,0) , xDelta) * Quaternion.CreateFromAxisAngle(new Vector3(0, -1, 0), yDelta) * Quaternion.CreateFromAxisAngle(new Vector3(0,0,-1), zDelta);
-            Matrix temp = Matrix.CreateFromQuaternion(shipRotation);
-            Quaternion additionalRot = Quaternion.CreateFromAxisAngle(temp.Left, xDelta) * Quaternion.CreateFromAxisAngle(temp.Forward, yDelta) * Quaternion.CreateFromAxisAngle(temp.Up, zDelta);
-            shipRotation *= additionalRot;
+            //Matrix temp = Matrix.CreateFromQuaternion(shipRotation);
+            //Vector3 templeft = temp.Left; templeft.Normalize(); Vector3 tempforward = temp.Forward; tempforward.Normalize(); Vector3 tempup = temp.Up; tempup.Normalize();
+            //Quaternion additionalRot = Quaternion.CreateFromAxisAngle(templeft, xDelta) * Quaternion.CreateFromAxisAngle(tempforward, yDelta) * Quaternion.CreateFromAxisAngle(tempup, zDelta);
+            Matrix additionalRot = Matrix.CreateRotationX(zDelta) * Matrix.CreateRotationY(-xDelta) * Matrix.CreateRotationZ(-yDelta);
+            shipRotation = additionalRot * shipRotation;
             float moveSpeed = secs * throttlePercent * maxSpeed;
             MoveForward(ref position, shipRotation, moveSpeed);
 
             //Game1.camera.Rotate(xDelta, zDelta);
             //Game1.camera.LookAt(this.position);
             //Game1.camera.Update(gameTime);
-            //UpdateCamera();
+            //UpdateCamera(moveSpeed, additionalRot);
             
         }
 
-        private void UpdateCamera()
+        private void UpdateCamera(float forwardSpeed, Matrix rotation)
         {
-            Vector3 campos = new Vector3(0, 25, 0);// Game1.camera._pos - position;
-            campos = Vector3.Transform(campos, Matrix.CreateFromQuaternion(shipRotation));
-            campos += position;
+            Vector3 campos = Game1.camera._pos;// -position;
+            campos = Vector3.Transform(campos, rotation);
+            //campos += position;
+            //MoveForward(ref campos, shipRotation, forwardSpeed);
 
-            Vector3 camup = new Vector3(0, 1, 0);
-            camup = Vector3.Transform(camup, Matrix.CreateFromQuaternion(shipRotation));
-            Game1.camera.UpdateCamera(campos, this.position, camup);
+            //Vector3 camup = new Vector3(0, 1, 0);
+            //camup = Vector3.Transform(camup, shipRotation);
+            Game1.camera.UpdateCamera(campos, this.position, shipRotation.Up);
         }
         //temp keyboard controls
         //private void ProcessKeyboard(GameTime gameTime)
@@ -101,7 +108,7 @@ namespace SolarSailor
         /// <param name="position"></param>
         /// <param name="rotationQuat"></param>
         /// <param name="forwardSpeed"></param>
-        private void MoveForward(ref Vector3 position, Quaternion rotationQuat, float forwardSpeed)
+        private void MoveForward(ref Vector3 position, Matrix rotationQuat, float forwardSpeed)
         {
             Vector3 addVector = Vector3.Transform(new Vector3(-1, 0, 0), rotationQuat);
             position += addVector * forwardSpeed;
@@ -114,7 +121,7 @@ namespace SolarSailor
 
         public override void Draw(Camera camera)
         {
-            Matrix worldMatrix = Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateFromQuaternion(shipRotation) * Matrix.CreateTranslation(position);
+            Matrix worldMatrix = Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
  
              Matrix[] transforms = new Matrix[model.Bones.Count];
              model.CopyAbsoluteBoneTransformsTo(transforms);
