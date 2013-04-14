@@ -22,6 +22,10 @@ namespace SolarSailor
         ModelManager modelManager;
         public static Camera camera;
 
+        //some people may want to invert the control of the camera's y axis
+        //we could probably make this controlable in the menu
+        public static bool invertYAxis = false;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);

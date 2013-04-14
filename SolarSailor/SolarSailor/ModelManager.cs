@@ -105,6 +105,10 @@ namespace SolarSailor
             //Y has -speed to fix inversion issue. Personal preference I suppose?
             x *= speed; y *= speed; z *= speed;
 
+            //may need to adjust camera/ship control
+            if (Game1.invertYAxis)
+                y = -y;
+
             //reset mouse position
             Mouse.SetPosition(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2);
             oldMouseState = Mouse.GetState();
