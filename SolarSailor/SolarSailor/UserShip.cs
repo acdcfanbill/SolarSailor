@@ -24,8 +24,8 @@ namespace SolarSailor
         float camDistance = 25;  //no clue what min/max shoudl be, have to test
 
         //need a max and a min pitch
-        float maxPitch = 80; //in degrees
-        float minPitch = -80; //in degrees
+        float maxPitch = 70; //in degrees
+        float minPitch = -70; //in degrees
 
         //need a max and min distance
         float maxZoom = 100; //in... dimensionless units?
@@ -59,19 +59,12 @@ namespace SolarSailor
 
             float xDelta = secs * inputXDeg; float yDelta = secs * inputYDeg; float zDelta = secs * inputZDeg;
 
-            //Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(-1,0,0) , xDelta) * Quaternion.CreateFromAxisAngle(new Vector3(0, -1, 0), yDelta) * Quaternion.CreateFromAxisAngle(new Vector3(0,0,-1), zDelta);
-            //Matrix temp = Matrix.CreateFromQuaternion(shipRotation);
-            //Vector3 templeft = temp.Left; templeft.Normalize(); Vector3 tempforward = temp.Forward; tempforward.Normalize(); Vector3 tempup = temp.Up; tempup.Normalize();
-            //Quaternion additionalRot = Quaternion.CreateFromAxisAngle(templeft, xDelta) * Quaternion.CreateFromAxisAngle(tempforward, yDelta) * Quaternion.CreateFromAxisAngle(tempup, zDelta);
             Matrix additionalRot = Matrix.CreateRotationX(zDelta) * Matrix.CreateRotationY(-xDelta) * Matrix.CreateRotationZ(-yDelta);
             shipRotation = additionalRot * shipRotation;
             float moveSpeed = secs * throttlePercent * maxSpeed;
      
             MoveForward(ref position, shipRotation, moveSpeed);
 
-            //Game1.camera.Rotate(xDelta, zDelta);
-            //Game1.camera.LookAt(this.position);
-            //Game1.camera.Update(gameTime);
             UpdateCamera(moveSpeed, additionalRot);
             
         }
@@ -84,14 +77,9 @@ namespace SolarSailor
             camAngle = Vector3.Transform(camAngle, Matrix.CreateRotationZ(MathHelper.ToRadians(camInclination))); //rotate cameras inclination
             camAngle.Normalize();
             camAngle *= camDistance;
-            Vector3 campos = this.position;//Game1.camera._pos;// -position;
+            Vector3 campos = this.position;
             campos = campos + camAngle;
-            //campos = Vector3.Transform(campos, rotation);
-            //campos += position;
-            //MoveForward(ref campos, shipRotation, forwardSpeed);
 
-            //Vector3 camup = new Vector3(0, 1, 0);
-            //camup = Vector3.Transform(camup, shipRotation);
             Game1.camera.UpdateCamera(campos, this.position, shipRotation.Up);
         }
 
@@ -113,6 +101,7 @@ namespace SolarSailor
             if (camDistance < minZoom)
                 camDistance = minZoom;
 
+            //I'm not convinced Clamp actually works...
             MathHelper.Clamp(camInclination, minPitch, maxPitch);
             MathHelper.Clamp(camDistance, minZoom, maxZoom);
         }
