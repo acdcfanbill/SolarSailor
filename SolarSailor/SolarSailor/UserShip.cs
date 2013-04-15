@@ -72,9 +72,9 @@ namespace SolarSailor
         private void UpdateCamera(float forwardSpeed, Matrix rotation)
         {
             Vector3 camAngle = new Vector3(1,0,0);
-            camAngle = Vector3.Transform(camAngle, shipRotation);
-            camAngle = Vector3.Transform(camAngle, Matrix.CreateRotationY(MathHelper.ToRadians(camHeading))); //rotate camera position for x
             camAngle = Vector3.Transform(camAngle, Matrix.CreateRotationZ(MathHelper.ToRadians(camInclination))); //rotate cameras inclination
+            camAngle = Vector3.Transform(camAngle, Matrix.CreateRotationY(MathHelper.ToRadians(camHeading))); //rotate camera position for x
+            camAngle = Vector3.Transform(camAngle, shipRotation);
             camAngle.Normalize();
             camAngle *= camDistance;
             Vector3 campos = this.position;
