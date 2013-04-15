@@ -27,6 +27,7 @@ namespace SolarSailor
         float y = 0f;
         float z = 0f;
         float throttlePercent;
+        bool rmb;
 
         public ModelManager(Game game)
             : base(game)
@@ -47,8 +48,8 @@ namespace SolarSailor
 
         protected override void LoadContent()
         {
-            //models.Add(new RotateableModel(Game.Content.Load<Model>(@"models/cube")));
-            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1.5f, 1.5f, 1f));
+            //models.Add(new UserShip(Game.Content.Load<Model>(@"models/cube"), 1.5f, 1.5f, 1.5f));
+            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1.5f, 1.5f, 1.5f));
 
             base.LoadContent();
         }
@@ -62,13 +63,22 @@ namespace SolarSailor
             keyboardState = Keyboard.GetState();
 
             //this is to figure out how much to move the ship/camera
-            getMouseInput(ref x, ref y, ref z);
+            getMouseInput(ref x, ref y, ref z, ref rmb);
 
             if (keyboardState.IsKeyUp(Keys.Add) && oldKeyboardState.IsKeyDown(Keys.Add))
                 throttlePercent = Math.Min(throttlePercent + .05f, 1.0f);
             if (keyboardState.IsKeyUp(Keys.Subtract) && oldKeyboardState.IsKeyDown(Keys.Subtract))
                 throttlePercent = Math.Max(throttlePercent - .05f, 0.0f);
+            
+            //have to check and see if we are moving the camera first
+            if(rmb)
+            {
+                foreach (UserShip s in models)
+                    s.UpdateCameraVariables(x, y, z);
 
+                x = 0; y = 0; z = 0;//reset all these to zero so the ships direction doesnt change
+            }
+            //do ship's update
             foreach (UserShip m in models)
             {
                 m.Update(gameTime, x, y, z, throttlePercent);
@@ -90,11 +100,15 @@ namespace SolarSailor
             base.Draw(gameTime);
         }
 
-        private void getMouseInput(ref float x, ref float y, ref float z)
+        private void getMouseInput(ref float x, ref float y, ref float z, ref bool rmb)
         {
             //Noticed that the ship steers from the nose, rather than from
             //the midpoint or cockpit or whatever.
             mouseState = Mouse.GetState();
+            if (mouseState.RightButton == ButtonState.Pressed)
+                rmb = true;
+            else
+                rmb = false;
 
             x = mouseState.X - oldMouseState.X;
             y = mouseState.Y - oldMouseState.Y;
@@ -103,7 +117,7 @@ namespace SolarSailor
             //speed adjust
             float speed = 5;
             //Y has -speed to fix inversion issue. Personal preference I suppose?
-            x *= speed; y *= speed; z *= speed;
+            //x *= speed; y *= speed; z *= speed;
 
             //may need to adjust camera/ship control
             if (Game1.invertYAxis)

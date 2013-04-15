@@ -22,6 +22,9 @@ namespace SolarSailor
         ModelManager modelManager;
         public static Camera camera;
 
+        //some static variables
+        public static float _fov = 60;
+
         //some people may want to invert the control of the camera's y axis
         //we could probably make this controlable in the menu
         public static bool invertYAxis = false;
@@ -43,7 +46,7 @@ namespace SolarSailor
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            camera = new Camera(this, new Vector3(5, -5, 15), Vector3.Zero, Vector3.Up, 60);
+            camera = new Camera(this, new Vector3(5, -5, 15), Vector3.Zero, Vector3.Up, _fov);
             Components.Add(camera);
 
             //camera = new ThirdPersonCamera();

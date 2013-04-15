@@ -21,7 +21,15 @@ namespace SolarSailor
 
         float camHeading = 0; //zero is directly behind the ship, so it 360, hence it's deg
         float camInclination = 20; //zero is directly behind the ship, also in degrees, -90 to 90
-        float camDistance = 50;  //no clue what min/max shoudl be, have to test
+        float camDistance = 25;  //no clue what min/max shoudl be, have to test
+
+        //need a max and a min pitch
+        float maxPitch = 80; //in degrees
+        float minPitch = -80; //in degrees
+
+        //need a max and min distance
+        float maxZoom = 100; //in... dimensionless units?
+        float minZoom = 10;
 
         //==================================================================
 
@@ -64,14 +72,21 @@ namespace SolarSailor
             //Game1.camera.Rotate(xDelta, zDelta);
             //Game1.camera.LookAt(this.position);
             //Game1.camera.Update(gameTime);
-            //UpdateCamera(moveSpeed, additionalRot);
+            UpdateCamera(moveSpeed, additionalRot);
             
         }
 
         private void UpdateCamera(float forwardSpeed, Matrix rotation)
         {
-            Vector3 campos = Game1.camera._pos;// -position;
-            campos = Vector3.Transform(campos, rotation);
+            Vector3 camAngle = new Vector3(1,0,0);
+            camAngle = Vector3.Transform(camAngle, shipRotation);
+            camAngle = Vector3.Transform(camAngle, Matrix.CreateRotationY(MathHelper.ToRadians(camHeading))); //rotate camera position for x
+            camAngle = Vector3.Transform(camAngle, Matrix.CreateRotationZ(MathHelper.ToRadians(camInclination))); //rotate cameras inclination
+            camAngle.Normalize();
+            camAngle *= camDistance;
+            Vector3 campos = this.position;//Game1.camera._pos;// -position;
+            campos = campos + camAngle;
+            //campos = Vector3.Transform(campos, rotation);
             //campos += position;
             //MoveForward(ref campos, shipRotation, forwardSpeed);
 
@@ -79,38 +94,38 @@ namespace SolarSailor
             //camup = Vector3.Transform(camup, shipRotation);
             Game1.camera.UpdateCamera(campos, this.position, shipRotation.Up);
         }
-        //temp keyboard controls
-        //private void ProcessKeyboard(GameTime gameTime)
-        //{
-        //    float leftRightRot = 0;
 
-        //    float turningSpeed = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f;
-        //    turningSpeed *= 1.6f;
-        //    KeyboardState keys = Keyboard.GetState();
-        //    if (keys.IsKeyDown(Keys.Right))
-        //        leftRightRot += turningSpeed;
-        //    if (keys.IsKeyDown(Keys.Left))
-        //        leftRightRot -= turningSpeed;
+        public void UpdateCameraVariables(float x, float y, float z)
+        {
+            camHeading += secs * x;
+            if (camHeading < 0)
+                camHeading = 360;
+            if (camHeading > 360)
+                camHeading = 0;
+            camInclination += secs * y;
+            if (camInclination > maxPitch)
+                camInclination = maxPitch;
+            if (camInclination < minPitch)
+                camInclination = minPitch;
+            camDistance += secs * -z;
+            if (camDistance > maxZoom)
+                camDistance = maxZoom;
+            if (camDistance < minZoom)
+                camDistance = minZoom;
 
-        //    float upDownRot = 0;
-        //    if (keys.IsKeyDown(Keys.Down))
-        //        upDownRot -= turningSpeed;
-        //    if (keys.IsKeyDown(Keys.Up))
-        //        upDownRot += turningSpeed;
-
-        //    Quaternion additionalRot = Quaternion.CreateFromAxisAngle(new Vector3(0, 0, -1), leftRightRot) * Quaternion.CreateFromAxisAngle(new Vector3(1, 0, 0), upDownRot);
-        //    shipRotation *= additionalRot;
-        //}
+            MathHelper.Clamp(camInclination, minPitch, maxPitch);
+            MathHelper.Clamp(camDistance, minZoom, maxZoom);
+        }
 
         /// <summary>
         /// Function to move the ship forward
         /// </summary>
         /// <param name="position"></param>
-        /// <param name="rotationQuat"></param>
+        /// <param name="rotation"></param>
         /// <param name="forwardSpeed"></param>
-        private void MoveForward(ref Vector3 position, Matrix rotationQuat, float forwardSpeed)
+        private void MoveForward(ref Vector3 position, Matrix rotation, float forwardSpeed)
         {
-            Vector3 addVector = Vector3.Transform(new Vector3(-1, 0, 0), rotationQuat);
+            Vector3 addVector = Vector3.Transform(new Vector3(-1, 0, 0), rotation);
             position += addVector * forwardSpeed;
         }
 
