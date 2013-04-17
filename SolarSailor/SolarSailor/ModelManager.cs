@@ -18,6 +18,9 @@ namespace SolarSailor
     public class ModelManager : Microsoft.Xna.Framework.DrawableGameComponent
     {
         List<BasicModel> models = new List<BasicModel>();
+        //Had to make a new list to hold static models.
+        List<BasicModel> staticModel = new List<BasicModel>();
+
         KeyboardState keyboardState;
         KeyboardState oldKeyboardState;
         MouseState mouseState;
@@ -50,6 +53,7 @@ namespace SolarSailor
         {
             //models.Add(new UserShip(Game.Content.Load<Model>(@"models/cube"), 1.5f, 1.5f, 1.5f));
             models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1.5f, 1.5f, 1.5f));
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),new Vector3(50, 50, 0)));
 
             base.LoadContent();
         }
@@ -84,6 +88,11 @@ namespace SolarSailor
                 m.Update(gameTime, x, y, z, throttlePercent);
                 //m.Update();
             }
+            //Doesn't update anything currently.
+            foreach (StaticModel sm in staticModel)
+            {
+                sm.Update(gameTime);
+            }
 
             oldKeyboardState = keyboardState;
 
@@ -95,6 +104,11 @@ namespace SolarSailor
             foreach (UserShip m in models)
             {
                 m.Draw(Game1.camera);
+            }
+
+            foreach (StaticModel sm in staticModel)
+            {
+                sm.Draw(Game1.camera);
             }
 
             base.Draw(gameTime);
@@ -115,7 +129,7 @@ namespace SolarSailor
             z = mouseState.ScrollWheelValue - oldMouseState.ScrollWheelValue;
 
             //speed adjust
-            float speed = 5;
+            //float speed = 5;
             //Y has -speed to fix inversion issue. Personal preference I suppose?
             //x *= speed; y *= speed; z *= speed;
 
