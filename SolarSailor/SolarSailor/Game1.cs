@@ -22,6 +22,8 @@ namespace SolarSailor
         ModelManager modelManager;
         public static Camera camera;
 
+        Texture2D sampleOverlay;
+
         //some static variables
         public static float _fov = 60;
 
@@ -68,7 +70,7 @@ namespace SolarSailor
         /// </summary>
         protected override void LoadContent()
         {
-
+            sampleOverlay = Content.Load<Texture2D>(@"models\sampleoverlay");
             base.LoadContent();
         }
 
@@ -112,6 +114,18 @@ namespace SolarSailor
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+            //Here we add 2d stuff, I suppose
+            spriteBatch.Begin();
+            //Tried to center this as best as I could. The static values in between
+            //(the 5 and the 100) are the modifiers for getting it centered. I think we'll
+            //need a better crosshair than this, mine's kinda bad but I made it in about 45 seconds.
+            spriteBatch.Draw(sampleOverlay,
+                new Vector2((Window.ClientBounds.Width / 2)
+                        - (sampleOverlay.Width / 2) + 5,
+                        (Window.ClientBounds.Height / 2) - 100
+                        - (sampleOverlay.Height / 2)),
+                        Color.White);
+            spriteBatch.End();
         }
     }
 }
