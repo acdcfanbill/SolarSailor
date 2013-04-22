@@ -14,10 +14,19 @@ namespace SolarSailor
     /// <summary>
     /// This is the main type for your game
     /// </summary>
+    /// 
+    
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        
+        public static Menus menu;
+        //graphics properties
+        public static Vector2 screenSize;
+        private int preferredWidth;
+        private int preferredHeight;
+        private bool fullscreen = false;
 
         ModelManager modelManager;
         public static Camera camera;
@@ -31,11 +40,39 @@ namespace SolarSailor
         //we could probably make this controlable in the menu
         public static bool invertYAxis = false;
 
+        //GameState info
+        public enum GameState { StartUp, MainMenu, Credits, PauseMenu, NewGame, InGame, GameOver, YouWin, InstructionScreen, GameExit }
+        public static GameState currentGameState = GameState.MainMenu;
+
+
+
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
+            //fullscreen = true;
+
+            if (fullscreen)
+            {
+                preferredWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                preferredHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                graphics.IsFullScreen = true;
+            }
+            else
+            {
+                preferredWidth = 1024;
+                preferredHeight = 768;
+                graphics.IsFullScreen = false;
+            }
+            //don't want fulscreen deving, want a windowed game.
+            graphics.PreferredBackBufferWidth = preferredWidth;
+            graphics.PreferredBackBufferHeight = preferredHeight;
+            graphics.PreferMultiSampling = false;
+
+            screenSize = new Vector2(preferredWidth, preferredHeight);
         }
 
         /// <summary>
@@ -51,13 +88,15 @@ namespace SolarSailor
             camera = new Camera(this, new Vector3(5, -5, 15), Vector3.Zero, Vector3.Up, _fov);
             Components.Add(camera);
 
+            menu = new Menus(this);
+            Components.Add(menu);
             //camera = new ThirdPersonCamera();
             //camera.Perspective(90, (float)GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height,
             //    1.0f, 3000.0f);
             //camera.LookAt(new Vector3(-15f, 10f, 0f),
             //    Vector3.Zero, Vector3.Up);
-            
 
+            currentGameState = GameState.StartUp;
             modelManager = new ModelManager(this);
             Components.Add(modelManager);
 
@@ -71,6 +110,7 @@ namespace SolarSailor
         protected override void LoadContent()
         {
             sampleOverlay = Content.Load<Texture2D>(@"models\sampleoverlay");
+            spriteBatch = new SpriteBatch(GraphicsDevice);
             base.LoadContent();
         }
 
@@ -93,9 +133,48 @@ namespace SolarSailor
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
             // TODO: Add your update logic here
-
+            switch (currentGameState)
+            {
+                case GameState.StartUp:
+                    modelManager.Enabled = false;
+                    modelManager.Visible = false;
+                    break;
+                case GameState.MainMenu:
+                    modelManager.Enabled = false;
+                    modelManager.Visible = false;
+                    break;
+                case GameState.NewGame:
+                    modelManager = new ModelManager(this);
+                    Components.Add(modelManager);
+                    currentGameState = GameState.InGame;
+                    break;
+                case GameState.InGame:
+                    modelManager.Enabled = true;
+                    modelManager.Visible = true;
+                    break;
+                case GameState.PauseMenu:
+                    modelManager.Enabled = false;
+                    modelManager.Visible = false;
+                    break;
+                case GameState.Credits:
+                    //spriteManager.Enabled = false;
+                    //spriteManager.Visible = false;
+                    break;
+                case GameState.GameOver:
+                    modelManager.Enabled = false;
+                    modelManager.Visible = false;
+                    Components.Remove(modelManager);
+                    break;
+                case GameState.YouWin:
+                    modelManager.Enabled = false;
+                    modelManager.Visible = false;
+                    Components.Remove(modelManager);
+                    break;
+                case GameState.GameExit:
+                    this.Exit();
+                    break;
+            }
             base.Update(gameTime);
         }
 
@@ -105,12 +184,26 @@ namespace SolarSailor
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            /*
             GraphicsDevice.Clear(Color.Black);
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-
+             * */
+            switch (currentGameState)
+            {
+                case GameState.MainMenu:
+                    break;
+                case GameState.NewGame:
+                    break;
+                case GameState.InGame:
+                    break;
+                case GameState.PauseMenu:
+                    break;
+                case GameState.GameOver:
+                    break;
+            }
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
