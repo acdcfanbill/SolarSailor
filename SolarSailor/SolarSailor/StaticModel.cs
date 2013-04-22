@@ -27,12 +27,12 @@ namespace SolarSailor
 
         //If I mess with it by assigning it actual values here, the initial position of the ship
         //changes accordingly.
-        Vector3 initialPosition = Vector3.Zero;
+        Vector3 initialPosition;
 
         public StaticModel(Model m, Vector3 position)
             : base(m)
         {
-            Vector3 initialPosition = position;
+            this.initialPosition = position;
         }
 
         public void Update(GameTime gameTime)

@@ -53,7 +53,18 @@ namespace SolarSailor
         {
             //models.Add(new UserShip(Game.Content.Load<Model>(@"models/cube"), 1.5f, 1.5f, 1.5f));
             models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1.5f, 1.5f, 1.5f));
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),new Vector3(50, 50, 0)));
+
+            //Still trying to figure out exactly what coordinates to pass to the constructor
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),new Vector3(-50, 20, -35)));
+            
+            //Randomize these so that each course is different
+            //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-90, 25, 0)));
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-125, 10, 30)));
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-100, -10, -30)));
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-150, 20, 10)));
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-117, -35, -20)));
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-150, -20, 44)));
 
             base.LoadContent();
         }
