@@ -109,8 +109,11 @@ namespace SolarSailor
         /// </summary>
         protected override void LoadContent()
         {
+<<<<<<< HEAD
             sampleOverlay = Content.Load<Texture2D>(@"models\sampleoverlay");
+=======
             spriteBatch = new SpriteBatch(GraphicsDevice);
+>>>>>>> origin/master
             base.LoadContent();
         }
 
@@ -184,6 +187,13 @@ namespace SolarSailor
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            /*
+            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+             * */
             switch (currentGameState)
             {
                 case GameState.MainMenu:
@@ -191,7 +201,6 @@ namespace SolarSailor
                 case GameState.NewGame:
                     break;
                 case GameState.InGame:
-                    set3DDrawing();
                     break;
                 case GameState.PauseMenu:
                     break;
@@ -213,16 +222,6 @@ namespace SolarSailor
                         - (sampleOverlay.Height / 2)),
                         Color.White);
             spriteBatch.End();
-        }
-
-        //need to setup drawing stuff for the 3d parts
-        private void set3DDrawing()
-        {
-            GraphicsDevice.Clear(Color.Black);
-            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-            GraphicsDevice.BlendState = BlendState.Opaque;
-            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
         }
     }
 }

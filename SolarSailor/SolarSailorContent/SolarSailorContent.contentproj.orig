@@ -56,6 +56,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="models\sampleoverlay.png">
       <Name>sampleoverlay</Name>
       <Importer>TextureImporter</Importer>
@@ -63,6 +64,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="models\spacerock.fbx">
+      <Name>spacerock</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+=======
     <Compile Include="textures\black.png">
       <Name>black</Name>
       <Importer>TextureImporter</Importer>
@@ -85,17 +91,13 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="SpriteFont1.spritefont">
       <Name>SpriteFont1</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="models\spacerock.fbx">
-      <Name>spacerock</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+>>>>>>> origin/master
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
