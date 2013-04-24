@@ -158,8 +158,10 @@ namespace SolarSailor
             //Good god look at all those end parentheses.
             //Uses one random generator because otherwise we get some ridiculous problems with seeding
             //and all the asteroids end up in one nice, tight line instead of scattered everywhere.
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(
-                        (randpos.Next(-1000, 100)), (randpos.Next(-300, 300)), (randpos.Next(-300, 300)))));
+            //--bill I added on a new vector to randomize z,y,z rotations so they are all facing the same way
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
+                new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
+                new Vector3((randpos.Next(-10,10)),(randpos.Next(-10,10)),(randpos.Next(-10,10)))));
         }
     }
 }

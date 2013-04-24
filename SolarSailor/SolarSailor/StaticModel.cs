@@ -28,11 +28,20 @@ namespace SolarSailor
         //If I mess with it by assigning it actual values here, the initial position of the ship
         //changes accordingly.
         Vector3 initialPosition;
+        float xRotation;
+        float yRotation;
+        float zRotation;
 
-        public StaticModel(Model m, Vector3 position)
+        public StaticModel(Model m, Vector3 position, Vector3 rotation)
             : base(m)
         {
             this.initialPosition = position;
+            xRotation = rotation.X; yRotation = rotation.Y; zRotation = rotation.Z;
+        }
+        //helper constructor to allow construction with only position specified
+        public StaticModel(Model m, Vector3 position)
+            : this(m,position,Vector3.Zero)
+        {
         }
 
         public void Initialize()
@@ -47,7 +56,8 @@ namespace SolarSailor
 
         public override void Draw(Camera camera)
         {
-            Matrix worldMatrix = Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateTranslation(initialPosition);
+            Matrix worldMatrix = Matrix.CreateRotationX(xRotation) * Matrix.CreateRotationY(yRotation) * 
+                Matrix.CreateRotationZ(zRotation) * Matrix.CreateTranslation(initialPosition);
 
             Matrix[] transforms = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transforms);
