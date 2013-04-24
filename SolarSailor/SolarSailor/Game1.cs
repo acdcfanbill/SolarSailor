@@ -38,7 +38,7 @@ namespace SolarSailor
 
         //some people may want to invert the control of the camera's y axis
         //we could probably make this controlable in the menu
-        public static bool invertYAxis = false;
+        public static bool invertYAxis = true;
 
         //GameState info
         public enum GameState { StartUp, MainMenu, Credits, PauseMenu, NewGame, InGame, GameOver, YouWin, InstructionScreen, GameExit }

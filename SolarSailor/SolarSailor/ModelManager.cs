@@ -25,6 +25,7 @@ namespace SolarSailor
         KeyboardState oldKeyboardState;
         MouseState mouseState;
         MouseState oldMouseState;
+        Random randpos;
 
         float x = 0f;
         float y = 0f;
@@ -45,6 +46,7 @@ namespace SolarSailor
         public override void Initialize()
         {
             throttlePercent = 0.1f;
+            randpos = new Random();
 
             base.Initialize();
         }
@@ -59,12 +61,10 @@ namespace SolarSailor
             
             //Randomize these so that each course is different
             //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-90, 25, 0)));
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-125, 10, 30)));
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-100, -10, -30)));
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-150, 20, 10)));
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-117, -35, -20)));
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(-150, -20, 44)));
+            for (int i = 0; i <= 1000; i++)
+            {
+                AsteroidMaker();
+            }
 
             base.LoadContent();
         }
@@ -151,6 +151,15 @@ namespace SolarSailor
             //reset mouse position
             Mouse.SetPosition(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2);
             oldMouseState = Mouse.GetState();
+        }
+
+        private void AsteroidMaker()
+        {
+            //Good god look at all those end parentheses.
+            //Uses one random generator because otherwise we get some ridiculous problems with seeding
+            //and all the asteroids end up in one nice, tight line instead of scattered everywhere.
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"), new Vector3(
+                        (randpos.Next(-1000, 100)), (randpos.Next(-300, 300)), (randpos.Next(-300, 300)))));
         }
     }
 }

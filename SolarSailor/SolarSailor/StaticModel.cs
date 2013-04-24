@@ -35,6 +35,11 @@ namespace SolarSailor
             this.initialPosition = position;
         }
 
+        public void Initialize()
+        {
+
+        }
+
         public void Update(GameTime gameTime)
         {
 
