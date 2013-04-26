@@ -56,12 +56,14 @@ namespace SolarSailor
             //all bounding spheres for collisions.
             foreach (ModelMesh meshes in model.Meshes)
             {
-                foreach (ModelMesh otherMeshes in model.Meshes)
+                foreach (ModelMesh otherMeshes in otherModel.Meshes)
                 {
                     if (meshes.BoundingSphere.Transform(
                         GetWorld()).Intersects(
                         otherMeshes.BoundingSphere.Transform(otherWorld)))
+                    {
                         return true;
+                    }
                 }
             }
             return false;

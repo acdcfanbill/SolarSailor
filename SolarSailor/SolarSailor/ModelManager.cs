@@ -104,6 +104,14 @@ namespace SolarSailor
             {
                 sm.Update(gameTime);
             }
+            //models[0] will be the user's ship
+            for (int j = 0; j < staticModel.Count; ++j)
+            {
+                if (models[0].CollidesWith(staticModel[j].model, staticModel[j].GetWorld()))
+                {
+                   throttlePercent = 0;
+                }
+            }
 
             oldKeyboardState = keyboardState;
 
