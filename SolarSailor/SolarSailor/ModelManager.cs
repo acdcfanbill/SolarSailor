@@ -80,9 +80,9 @@ namespace SolarSailor
             //this is to figure out how much to move the ship/camera
             getMouseInput(ref x, ref y, ref z, ref rmb);
 
-            if (keyboardState.IsKeyUp(Keys.Add) && oldKeyboardState.IsKeyDown(Keys.Add))
+            if (keyboardState.IsKeyUp(Keys.Add) && oldKeyboardState.IsKeyDown(Keys.Space))
                 throttlePercent = Math.Min(throttlePercent + .05f, 1.0f);
-            if (keyboardState.IsKeyUp(Keys.Subtract) && oldKeyboardState.IsKeyDown(Keys.Subtract))
+            if (keyboardState.IsKeyUp(Keys.Subtract) && oldKeyboardState.IsKeyDown(Keys.LeftShift))
                 throttlePercent = Math.Max(throttlePercent - .05f, 0.0f);
             
             //have to check and see if we are moving the camera first
@@ -170,6 +170,11 @@ namespace SolarSailor
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
                 new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
                 new Vector3((randpos.Next(-10,10)),(randpos.Next(-10,10)),(randpos.Next(-10,10)))));
+
+            //skybox
+            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
+                new Vector3((randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000))),
+                new Vector3((randpos.Next(-400, 400)), (randpos.Next(-400, 400)), (randpos.Next(-700, 700)))));
         }
     }
 }
