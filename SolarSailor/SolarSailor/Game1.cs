@@ -20,7 +20,11 @@ namespace SolarSailor
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+        AudioEngine audioEngine;
+        SoundBank soundBank;
+        WaveBank waveBank;
+        Cue trackCue;
+
         public static Menus menu;
         //graphics properties
         public static Vector2 screenSize;
@@ -111,6 +115,11 @@ namespace SolarSailor
         {
             sampleOverlay = Content.Load<Texture2D>(@"models\sampleoverlay");
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            audioEngine = new AudioEngine(@"Content\Audio\GameAudio.xgs");
+            waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
+            soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
+            trackCue = soundBank.GetCue("DST-1990");
+            trackCue.Play();
             base.LoadContent();
         }
 
@@ -175,6 +184,7 @@ namespace SolarSailor
                     this.Exit();
                     break;
             }
+            audioEngine.Update();
             base.Update(gameTime);
         }
 
