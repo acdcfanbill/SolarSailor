@@ -110,9 +110,9 @@ namespace SolarSailor
                 if (sm.CollidesWith(models[0].model, models[0].GetWorld()))
                 {
                     UserShip us = (UserShip)models[0];
-                    Vector3 pushDir = sm.initialPosition + us.GetPosition();
+                    Vector3 pushDir = sm.GetPosition() - us.GetPosition();
                     pushDir.Normalize();
-                    pushDir *= 2;
+                    pushDir *= -2;
                     us.PushShip(pushDir);
                     soundBank.PlayCue("Fusion shot");
                    throttlePercent = 0;

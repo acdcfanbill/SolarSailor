@@ -28,6 +28,7 @@ namespace SolarSailor
         //If I mess with it by assigning it actual values here, the initial position of the ship
         //changes accordingly.
         public Vector3 initialPosition {get; protected set;}
+        BoundingSphere boundingSphere;
         float xRotation;
         float yRotation;
         float zRotation;
@@ -37,6 +38,8 @@ namespace SolarSailor
         {
             this.initialPosition = position;
             xRotation = rotation.X; yRotation = rotation.Y; zRotation = rotation.Z;
+            boundingSphere.Center = position;
+            boundingSphere.Radius = 10;
         }
         //helper constructor to allow construction with only position specified
         public StaticModel(Model m, Vector3 position)
@@ -52,6 +55,11 @@ namespace SolarSailor
         public void Update(GameTime gameTime)
         {
 
+        }
+
+        public Vector3 GetPosition()
+        {
+            return initialPosition;
         }
 
         public override Matrix GetWorld()
@@ -77,7 +85,7 @@ namespace SolarSailor
                     be.World = mesh.ParentBone.Transform * worldMatrix;
                 }
                 mesh.Draw();
-                BoundingSphereRenderer.Render(mesh.BoundingSphere, gd, Game1.camera.view, Game1.camera.projection, mesh.ParentBone.Transform * worldMatrix, Color.Red);
+                BoundingSphereRenderer.Render(boundingSphere, gd, Game1.camera.view, Game1.camera.projection, mesh.ParentBone.Transform * worldMatrix, Color.Red);
             }
         }
 
@@ -86,17 +94,25 @@ namespace SolarSailor
             //From book
             //Loop through each ModelMesh in both objects and compare
             //all bounding spheres for collisions.
-            foreach (ModelMesh meshes in model.Meshes)
+            //foreach (ModelMesh meshes in model.Meshes)
+            //{
+            //    foreach (ModelMesh otherMeshes in otherModel.Meshes)
+            //    {
+            //        if (meshes.BoundingSphere.Transform(
+            //            GetWorld()).Intersects(
+            //            otherMeshes.BoundingSphere.Transform(otherWorld)))
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
+            //return false;
+
+            //writing my own since this seems to be fucked
+            foreach (ModelMesh otherMeshes in otherModel.Meshes)
             {
-                foreach (ModelMesh otherMeshes in otherModel.Meshes)
-                {
-                    if (meshes.BoundingSphere.Transform(
-                        GetWorld()).Intersects(
-                        otherMeshes.BoundingSphere.Transform(otherWorld)))
-                    {
-                        return true;
-                    }
-                }
+                if (this.boundingSphere.Intersects(otherMeshes.BoundingSphere.Transform(otherWorld)))
+                    return true;
             }
             return false;
         }

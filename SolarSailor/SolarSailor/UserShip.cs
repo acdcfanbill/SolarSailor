@@ -121,7 +121,8 @@ namespace SolarSailor
 
         public override Matrix GetWorld()
         {
-            return Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
+            //return Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
+            return Matrix.CreateTranslation(position);
         }
 
         public Vector3 GetPosition()
