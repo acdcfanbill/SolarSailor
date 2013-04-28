@@ -73,6 +73,7 @@ namespace SolarSailor
             waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
             soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
             trackCue = soundBank.GetCue("Fusion shot");
+            trackCue = soundBank.GetCue("Thrusters");
             base.LoadContent();
         }
 
@@ -91,7 +92,6 @@ namespace SolarSailor
                 throttlePercent = Math.Min(throttlePercent + .05f, 1.0f);
             if (keyboardState.IsKeyUp(Keys.Subtract) && oldKeyboardState.IsKeyDown(Keys.LeftShift))
                 throttlePercent = Math.Max(throttlePercent - .05f, 0.0f);
-            
             //have to check and see if we are moving the camera first
             if(rmb)
             {
@@ -117,12 +117,12 @@ namespace SolarSailor
                 if (models[0].CollidesWith(staticModel[j].model, staticModel[j].GetWorld()))
                 {
                    throttlePercent = 0;
-                   soundBank.PlayCue("Fusion shot");
+                   //soundBank.PlayCue("Fusion shot");
                 }
             }
 
             oldKeyboardState = keyboardState;
-            
+            soundBank.PlayCue("Thrusters");
             audioEngine.Update();
 
             base.Update(gameTime);
@@ -139,7 +139,6 @@ namespace SolarSailor
             {
                 sm.Draw(Game1.camera);
             }
-
             base.Draw(gameTime);
         }
 

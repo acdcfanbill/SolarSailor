@@ -57,7 +57,7 @@ namespace SolarSailor
             graphics = new GraphicsDeviceManager(this);
             //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
-            fullscreen = true;
+            //fullscreen = true;
 
             if (fullscreen)
             {
@@ -120,6 +120,7 @@ namespace SolarSailor
             soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
             trackCue = soundBank.GetCue("DST-1990");
             trackCue.Play();
+            trackCue = soundBank.GetCue("Thrusters");
             base.LoadContent();
         }
 
