@@ -225,8 +225,8 @@ Wave Bank
     Windows Bank Path Edited = 0;
     Seek Tables = 1;
     Compression Preset Name = <none>;
-    Bank Last Revised Low = 2763659385;
-    Bank Last Revised High = 30294716;
+    Bank Last Revised Low = 3553369376;
+    Bank Last Revised High = 30294967;
 
     Wave
     {

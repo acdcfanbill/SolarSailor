@@ -114,8 +114,12 @@ namespace SolarSailor
                     pushDir.Normalize();
                     pushDir *= -2;
                     us.PushShip(pushDir);
-                    soundBank.PlayCue("Fusion shot");
-                   throttlePercent = 0;
+
+                   throttlePercent = 0; 
+                   soundBank.PlayCue("Fusion shot");
+
+
+                    
                 }
             }
             //do ship's update
