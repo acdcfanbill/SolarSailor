@@ -39,6 +39,8 @@ namespace SolarSailor
 
         //some static variables
         public static float _fov = 60;
+        public static float _gameLengthInSeconds = 30;
+        public static float _gameTimeAddedForSuccessfulCapture = 10;
 
         //some people may want to invert the control of the camera's y axis
         //we could probably make this controlable in the menu
@@ -57,7 +59,7 @@ namespace SolarSailor
             graphics = new GraphicsDeviceManager(this);
             //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
-            fullscreen = true;
+            //fullscreen = true;
 
             if (fullscreen)
             {
@@ -94,11 +96,6 @@ namespace SolarSailor
 
             menu = new Menus(this);
             Components.Add(menu);
-            //camera = new ThirdPersonCamera();
-            //camera.Perspective(90, (float)GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height,
-            //    1.0f, 3000.0f);
-            //camera.LookAt(new Vector3(-15f, 10f, 0f),
-            //    Vector3.Zero, Vector3.Up);
 
             currentGameState = GameState.StartUp;
             modelManager = new ModelManager(this);

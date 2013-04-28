@@ -30,12 +30,15 @@ namespace SolarSailor
         SoundBank soundBank;
         WaveBank waveBank;
         Cue trackCue;
+        GameTimer gameTimer;
+        GoalModel goalRing;
 
         float x = 0f;
         float y = 0f;
         float z = 0f;
         float throttlePercent;
         bool rmb;
+        bool goalExists;
 
         public ModelManager(Game game)
             : base(game)
@@ -51,6 +54,8 @@ namespace SolarSailor
         {
             throttlePercent = 0.1f;
             randpos = new Random();
+
+            gameTimer = new GameTimer(Game1._gameLengthInSeconds);
 
             BoundingSphereRenderer.InitializeGraphics(Game.GraphicsDevice, 30);
 
@@ -85,6 +90,16 @@ namespace SolarSailor
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            if (!goalExists)
+            {
+                GoalMaker();
+            }
+
+            //update the gameTimer
+            gameTimer.Update(gameTime);
+            if (gameTimer.CheckTimer())
+                Game1.currentGameState = Game1.GameState.GameOver;
+
             keyboardState = Keyboard.GetState();
 
             //this is to figure out how much to move the ship/camera
@@ -126,6 +141,8 @@ namespace SolarSailor
             foreach (UserShip m in models)
             {
                 m.Update(gameTime, x, y, z, throttlePercent);
+                if(goalRing.CollidesWith(m.model, m.GetWorld()))
+                    SuccessfulCapture();
                 //m.Update();
             }
 
@@ -136,8 +153,17 @@ namespace SolarSailor
             base.Update(gameTime);
         }
 
+        private void SuccessfulCapture()
+        {
+            goalExists = false;
+            gameTimer.AddTime(Game1._gameTimeAddedForSuccessfulCapture);
+        }
+
         public override void Draw(GameTime gameTime)
         {
+            //draw the goalring
+            goalRing.Draw(Game1.camera);
+
             foreach (UserShip m in models)
             {
                 m.Draw(Game1.camera);
@@ -186,6 +212,26 @@ namespace SolarSailor
             //reset mouse position
             Mouse.SetPosition(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2);
             oldMouseState = Mouse.GetState();
+        }
+
+        private void GoalMaker()
+        {
+            if (goalExists)
+                return;
+            goalExists = true;
+            bool collision = false;
+            do
+            {
+                goalRing = new GoalModel(Game.Content.Load<Model>(@"models/goalring"),
+                     new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
+                     new Vector3((randpos.Next(-10, 10)), (randpos.Next(-10, 10)), (randpos.Next(-10, 10))));
+                foreach (StaticModel sm in staticModel)
+                {
+                    if(sm.CollidesWith(goalRing.model,goalRing.GetWorld()))
+                        collision = true;
+                }
+            } while (collision);
+
         }
 
         private void AsteroidMaker()
