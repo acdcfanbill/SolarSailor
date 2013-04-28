@@ -16,7 +16,7 @@ namespace SolarSailor
     {
         //=================================================================
 
-        Vector3 position = Vector3.Zero;
+        public Vector3 position;
         Matrix shipRotation = Matrix.Identity;
 
         float camHeading = 0; //zero is directly behind the ship, so it 360, hence it's deg
@@ -44,6 +44,7 @@ namespace SolarSailor
         public UserShip(Model m, float maxXRad, float maxYRad, float maxZRad)
             :base(m)
         {
+            position = Vector3.Zero;
             secs = 0;
             this._maxXRad = maxXRad; this._maxYRad = maxYRad; this._maxZRad = maxZRad;
         }
@@ -118,10 +119,20 @@ namespace SolarSailor
             position += addVector * forwardSpeed;
         }
 
-        //public override Matrix GetWorld()
-        //{
-        //    return translation;
-        //}
+        public override Matrix GetWorld()
+        {
+            return Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
+        }
+
+        public Vector3 GetPosition()
+        {
+            return position;
+        }
+
+        public void PushShip(Vector3 pushVector)
+        {
+            position += pushVector;
+        }
 
         public override void Draw(Camera camera)
         {

@@ -52,6 +52,8 @@ namespace SolarSailor
             throttlePercent = 0.1f;
             randpos = new Random();
 
+            BoundingSphereRenderer.InitializeGraphics(Game.GraphicsDevice, 30);
+
             base.Initialize();
         }
 
@@ -65,7 +67,7 @@ namespace SolarSailor
             
             //Randomize these so that each course is different
             //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
-            for (int i = 0; i <= 1000; i++)
+            for (int i = 0; i <= 100; i++)
             {
                 AsteroidMaker();
             }
@@ -87,9 +89,9 @@ namespace SolarSailor
             //this is to figure out how much to move the ship/camera
             getMouseInput(ref x, ref y, ref z, ref rmb);
 
-            if (keyboardState.IsKeyUp(Keys.Add) && oldKeyboardState.IsKeyDown(Keys.Space))
+            if (keyboardState.IsKeyUp(Keys.O) && oldKeyboardState.IsKeyDown(Keys.O))
                 throttlePercent = Math.Min(throttlePercent + .05f, 1.0f);
-            if (keyboardState.IsKeyUp(Keys.Subtract) && oldKeyboardState.IsKeyDown(Keys.LeftShift))
+            if (keyboardState.IsKeyUp(Keys.L) && oldKeyboardState.IsKeyDown(Keys.L))
                 throttlePercent = Math.Max(throttlePercent - .05f, 0.0f);
             
             //have to check and see if we are moving the camera first
@@ -100,25 +102,27 @@ namespace SolarSailor
 
                 x = 0; y = 0; z = 0;//reset all these to zero so the ships direction doesnt change
             }
+
+            //Doesn't update anything currently.
+            foreach (StaticModel sm in staticModel)
+            {
+                sm.Update(gameTime);
+                if (sm.CollidesWith(models[0].model, models[0].GetWorld()))
+                {
+                    UserShip us = (UserShip)models[0];
+                    Vector3 pushDir = sm.initialPosition + us.GetPosition();
+                    pushDir.Normalize();
+                    pushDir *= 2;
+                    us.PushShip(pushDir);
+                    //throttlePercent = 0;
+                    soundBank.PlayCue("Fusion shot");
+                }
+            }
             //do ship's update
             foreach (UserShip m in models)
             {
                 m.Update(gameTime, x, y, z, throttlePercent);
                 //m.Update();
-            }
-            //Doesn't update anything currently.
-            foreach (StaticModel sm in staticModel)
-            {
-                sm.Update(gameTime);
-            }
-            //models[0] will be the user's ship
-            for (int j = 0; j < staticModel.Count; ++j)
-            {
-                if (models[0].CollidesWith(staticModel[j].model, staticModel[j].GetWorld()))
-                {
-                   throttlePercent = 0;
-                   soundBank.PlayCue("Fusion shot");
-                }
             }
 
             oldKeyboardState = keyboardState;
@@ -133,11 +137,21 @@ namespace SolarSailor
             foreach (UserShip m in models)
             {
                 m.Draw(Game1.camera);
+                foreach (ModelMesh meshes in m.model.Meshes)
+                {
+                    //BoundingSphereRenderer(meshes.BoundingSphere);
+                    //BoundingSphereRenderer.Render(meshes.BoundingSphere, Game.GraphicsDevice, Game1.camera.view, Game1.camera.projection, Color.Red);
+                }
             }
 
             foreach (StaticModel sm in staticModel)
             {
-                sm.Draw(Game1.camera);
+                //foreach (ModelMesh meshes in sm.model.Meshes)
+                //{
+                //    //BoundingSphereRenderer(meshes.BoundingSphere);
+                //    BoundingSphereRenderer.Render(meshes.BoundingSphere, Game.GraphicsDevice, Game1.camera.view, Game1.camera.projection, Color.Red);
+                //}
+                sm.Draw(Game1.camera, Game.GraphicsDevice);
             }
 
             base.Draw(gameTime);
@@ -177,9 +191,11 @@ namespace SolarSailor
             //Uses one random generator because otherwise we get some ridiculous problems with seeding
             //and all the asteroids end up in one nice, tight line instead of scattered everywhere.
             //--bill I added on a new vector to randomize z,y,z rotations so they are all facing the same way
+            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
+            //    new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
+            //    new Vector3((randpos.Next(-10,10)),(randpos.Next(-10,10)),(randpos.Next(-10,10)))));
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-                new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
-                new Vector3((randpos.Next(-10,10)),(randpos.Next(-10,10)),(randpos.Next(-10,10)))));
+                new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500)))));
 
             //skybox
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),

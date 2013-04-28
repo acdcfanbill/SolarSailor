@@ -49,7 +49,7 @@ namespace SolarSailor
         //==========================================================
         //This likely needs to be changed to work
         //==========================================================
-        public bool CollidesWith(Model otherModel, Matrix otherWorld)
+        public virtual bool CollidesWith(Model otherModel, Matrix otherWorld)
         {
             //From book
             //Loop through each ModelMesh in both objects and compare

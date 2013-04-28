@@ -27,7 +27,7 @@ namespace SolarSailor
 
         //If I mess with it by assigning it actual values here, the initial position of the ship
         //changes accordingly.
-        Vector3 initialPosition;
+        public Vector3 initialPosition {get; protected set;}
         float xRotation;
         float yRotation;
         float zRotation;
@@ -54,7 +54,12 @@ namespace SolarSailor
 
         }
 
-        public override void Draw(Camera camera)
+        public override Matrix GetWorld()
+        {
+            return Matrix.CreateRotationX(xRotation) * Matrix.CreateRotationY(yRotation) *
+                Matrix.CreateRotationZ(zRotation) * Matrix.CreateTranslation(initialPosition);
+        }
+        public void Draw(Camera camera, GraphicsDevice gd)
         {
             Matrix worldMatrix = Matrix.CreateRotationX(xRotation) * Matrix.CreateRotationY(yRotation) * 
                 Matrix.CreateRotationZ(zRotation) * Matrix.CreateTranslation(initialPosition);
@@ -72,8 +77,28 @@ namespace SolarSailor
                     be.World = mesh.ParentBone.Transform * worldMatrix;
                 }
                 mesh.Draw();
+                BoundingSphereRenderer.Render(mesh.BoundingSphere, gd, Game1.camera.view, Game1.camera.projection, mesh.ParentBone.Transform * worldMatrix, Color.Red);
             }
         }
 
+        public override bool CollidesWith(Model otherModel, Matrix otherWorld)
+        {
+            //From book
+            //Loop through each ModelMesh in both objects and compare
+            //all bounding spheres for collisions.
+            foreach (ModelMesh meshes in model.Meshes)
+            {
+                foreach (ModelMesh otherMeshes in otherModel.Meshes)
+                {
+                    if (meshes.BoundingSphere.Transform(
+                        GetWorld()).Intersects(
+                        otherMeshes.BoundingSphere.Transform(otherWorld)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }
