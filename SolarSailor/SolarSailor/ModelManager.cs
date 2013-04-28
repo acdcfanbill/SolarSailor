@@ -26,6 +26,10 @@ namespace SolarSailor
         MouseState mouseState;
         MouseState oldMouseState;
         Random randpos;
+        AudioEngine audioEngine;
+        SoundBank soundBank;
+        WaveBank waveBank;
+        Cue trackCue;
 
         float x = 0f;
         float y = 0f;
@@ -65,7 +69,10 @@ namespace SolarSailor
             {
                 AsteroidMaker();
             }
-
+            audioEngine = new AudioEngine(@"Content\Audio\GameAudio.xgs");
+            waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
+            soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
+            trackCue = soundBank.GetCue("Fusion shot");
             base.LoadContent();
         }
 
@@ -110,10 +117,13 @@ namespace SolarSailor
                 if (models[0].CollidesWith(staticModel[j].model, staticModel[j].GetWorld()))
                 {
                    throttlePercent = 0;
+                   soundBank.PlayCue("Fusion shot");
                 }
             }
 
             oldKeyboardState = keyboardState;
+            
+            audioEngine.Update();
 
             base.Update(gameTime);
         }
