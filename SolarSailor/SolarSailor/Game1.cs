@@ -120,6 +120,7 @@ namespace SolarSailor
             soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
             trackCue = soundBank.GetCue("DST-1990");
             trackCue.Play();
+            trackCue = soundBank.GetCue("Thrusters");
             base.LoadContent();
         }
 
