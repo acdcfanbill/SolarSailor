@@ -109,7 +109,6 @@ namespace SolarSailor
                 sm.Update(gameTime);
                 if (sm.CollidesWith(models[0].model, models[0].GetWorld()))
                 {
-<<<<<<< HEAD
                     UserShip us = (UserShip)models[0];
                     Vector3 pushDir = sm.initialPosition + us.GetPosition();
                     pushDir.Normalize();
@@ -117,16 +116,8 @@ namespace SolarSailor
                     us.PushShip(pushDir);
                     //throttlePercent = 0;
                     soundBank.PlayCue("Fusion shot");
-=======
                    throttlePercent = 0;
                    //soundBank.PlayCue("Fusion shot");
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> bf7393bc020dd6e8bd0ce00bdd852725c17c4a3f
-=======
->>>>>>> bf7393bc020dd6e8bd0ce00bdd852725c17c4a3f
-=======
->>>>>>> bf7393bc020dd6e8bd0ce00bdd852725c17c4a3f
                 }
             }
             //do ship's update
