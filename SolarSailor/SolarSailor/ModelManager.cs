@@ -120,6 +120,9 @@ namespace SolarSailor
 =======
                    throttlePercent = 0;
                    //soundBank.PlayCue("Fusion shot");
+<<<<<<< HEAD
+>>>>>>> bf7393bc020dd6e8bd0ce00bdd852725c17c4a3f
+=======
 >>>>>>> bf7393bc020dd6e8bd0ce00bdd852725c17c4a3f
                 }
             }
