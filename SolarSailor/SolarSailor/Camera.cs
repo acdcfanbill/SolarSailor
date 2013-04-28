@@ -64,6 +64,7 @@ namespace SolarSailor
             base.Update(gameTime);
         }
 
+
         /// <summary>
         /// Called up update the camera for each frame.  pass in camera position and target
         /// position as well as the 'up' vector for the camera
@@ -73,7 +74,7 @@ namespace SolarSailor
         /// <param name="up">Vector3 pointing up for camera</param>
         public void UpdateCamera(Vector3 pos, Vector3 target, Vector3 up)
         {
-            _pos = pos; _target = target; _up = up;
+            this._pos = pos; this._target = target; this._up = up;
         }
     }
 }

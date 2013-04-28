@@ -18,9 +18,11 @@ namespace SolarSailor
     
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+
+        public static SkyBox skyBox;
+
         public static Menus menu;
         //graphics properties
         public static Vector2 screenSize;
@@ -28,7 +30,7 @@ namespace SolarSailor
         private int preferredHeight;
         private bool fullscreen = false;
 
-        ModelManager modelManager;
+        public static ModelManager modelManager;
         public static Camera camera;
 
         Texture2D sampleOverlay;
@@ -43,10 +45,6 @@ namespace SolarSailor
         //GameState info
         public enum GameState { StartUp, MainMenu, Credits, PauseMenu, NewGame, InGame, GameOver, YouWin, InstructionScreen, GameExit }
         public static GameState currentGameState = GameState.MainMenu;
-
-
-
-
 
         public Game1()
         {
@@ -90,11 +88,9 @@ namespace SolarSailor
 
             menu = new Menus(this);
             Components.Add(menu);
-            //camera = new ThirdPersonCamera();
-            //camera.Perspective(90, (float)GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height,
-            //    1.0f, 3000.0f);
-            //camera.LookAt(new Vector3(-15f, 10f, 0f),
-            //    Vector3.Zero, Vector3.Up);
+
+            skyBox = new SkyBox(this);
+            Components.Add(skyBox);
 
             currentGameState = GameState.StartUp;
             modelManager = new ModelManager(this);
@@ -111,6 +107,7 @@ namespace SolarSailor
         {
             sampleOverlay = Content.Load<Texture2D>(@"models\sampleoverlay");
             spriteBatch = new SpriteBatch(GraphicsDevice);
+             
             base.LoadContent();
         }
 
@@ -130,10 +127,6 @@ namespace SolarSailor
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-            // TODO: Add your update logic here
             switch (currentGameState)
             {
                 case GameState.StartUp:
@@ -222,7 +215,7 @@ namespace SolarSailor
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            //GraphicsDevice.RasterizerState = RasterizerState.CullNone;
         }
     }
 }

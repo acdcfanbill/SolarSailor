@@ -45,7 +45,7 @@ namespace SolarSailor
         /// </summary>
         public override void Initialize()
         {
-            throttlePercent = 0.1f;
+            throttlePercent = 0.0f;
             randpos = new Random();
 
             base.Initialize();
@@ -112,6 +112,7 @@ namespace SolarSailor
 
         public override void Draw(GameTime gameTime)
         {
+            Game1.skyBox.DrawSkyBox();
             foreach (UserShip m in models)
             {
                 m.Draw(Game1.camera);
@@ -137,7 +138,14 @@ namespace SolarSailor
 
             x = mouseState.X - oldMouseState.X;
             y = mouseState.Y - oldMouseState.Y;
-            z = mouseState.ScrollWheelValue - oldMouseState.ScrollWheelValue;
+            //changing z to work from q and w
+            //z = mouseState.ScrollWheelValue - oldMouseState.ScrollWheelValue;
+            if(Keyboard.GetState().IsKeyDown(Keys.Q))
+                z = -10;
+            else if (Keyboard.GetState().IsKeyDown(Keys.W))
+                z = 10;
+            else
+                z = mouseState.ScrollWheelValue - oldMouseState.ScrollWheelValue;
 
             //speed adjust
             //float speed = 5;
@@ -162,6 +170,36 @@ namespace SolarSailor
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
                 new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
                 new Vector3((randpos.Next(-10,10)),(randpos.Next(-10,10)),(randpos.Next(-10,10)))));
+        }
+
+        /// <summary>
+        /// Helper function to return the ship's position. our controllable ship
+        /// is the first one in the model list
+        /// </summary>
+        /// <returns></returns>
+        public Vector3 GetShipPosition()
+        {
+            foreach (UserShip s in models)
+            {
+                return s.GetPosition();
+            }
+            throw new InvalidProgramException("No Usership to get Position from");
+        }
+        public Matrix GetShipRotation()
+        {
+            foreach (UserShip s in models)
+            {
+                return s.GetRotation();
+            }
+            throw new InvalidProgramException("No Usership to get rotation data from");
+        }
+        public UserShip getUserShip()
+        {
+            foreach (UserShip s in models)
+            {
+                return s;
+            }
+            throw new InvalidProgramException("No Usership to pass");
         }
     }
 }

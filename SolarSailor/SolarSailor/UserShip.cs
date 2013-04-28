@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SolarSailor
 {
-    class UserShip : BasicModel
+    public class UserShip : BasicModel
     {
         //=================================================================
 
@@ -118,10 +118,10 @@ namespace SolarSailor
             position += addVector * forwardSpeed;
         }
 
-        //public override Matrix GetWorld()
-        //{
-        //    return translation;
-        //}
+        public override Matrix GetWorld()
+        {
+            return Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
+        }
 
         public override void Draw(Camera camera)
         {
@@ -137,7 +137,7 @@ namespace SolarSailor
                      be.PreferPerPixelLighting = true;
                      be.Projection = camera.projection;
                      be.View = camera.view;
-                     be.World = mesh.ParentBone.Transform * worldMatrix;
+                     be.World = mesh.ParentBone.Transform * GetWorld();
                  }
                  mesh.Draw();
              }
@@ -157,6 +157,16 @@ namespace SolarSailor
                 inputYDeg = _maxYRad;
             if (inputYDeg < -_maxYRad)
                 inputYDeg = -_maxYRad;
+        }
+
+        public override Vector3 GetPosition()
+        {
+            return this.position;
+        }
+
+        public Matrix GetRotation()
+        {
+            return this.shipRotation;
         }
     }
 }

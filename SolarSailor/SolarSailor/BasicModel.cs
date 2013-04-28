@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SolarSailor
 {
-    class BasicModel
+    public class BasicModel
     {
         public Model model { get; protected set; }
         protected Matrix world = Matrix.Identity;
@@ -65,6 +65,11 @@ namespace SolarSailor
                 }
             }
             return false;
+        }
+
+        public virtual Vector3 GetPosition()
+        {
+            return Vector3.Zero;
         }
     }
 }
