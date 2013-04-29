@@ -112,6 +112,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="GoalModel.cs" />
     <Compile Include="GameTimer.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="Menus.cs" />
     <Compile Include="ModelManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

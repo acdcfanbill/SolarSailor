@@ -159,6 +159,11 @@ namespace SolarSailor
             gameTimer.AddTime(Game1._gameTimeAddedForSuccessfulCapture);
         }
 
+        public float GetTimeRemaining()
+        {
+            return gameTimer.GetHashCode();
+        }
+
         public override void Draw(GameTime gameTime)
         {
             //draw the goalring

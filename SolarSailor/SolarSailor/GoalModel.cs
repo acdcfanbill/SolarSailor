@@ -14,8 +14,6 @@ namespace SolarSailor
 {
     class GoalModel : StaticModel
     {
-        private Vector3 vector3;
-
         public GoalModel(Model m, Vector3 position, Vector3 rotation)
             : base(m, position, rotation)
         {
