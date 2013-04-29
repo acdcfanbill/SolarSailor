@@ -160,13 +160,13 @@ namespace SolarSailor
                 case GameState.NewGame:
                     modelManager = new ModelManager(this);
                     hud = new HUD(this);
-                    hud.newDelivery(120000);
+                    hud.newDelivery();
                     Components.Add(modelManager);
                     Components.Add(hud);
                     currentGameState = GameState.InGame;
                     break;
                 case GameState.InGame:
-                    if (!hud.start)
+                    if (!hud.start || hud.Enabled == false)
                     {
                         modelManager.Enabled = false;
                         modelManager.Visible = true;

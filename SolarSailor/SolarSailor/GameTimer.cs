@@ -18,8 +18,8 @@ namespace SolarSailor
     /// </summary>
     public class GameTimer
     {
-        private float timeSinceStart;
-        private float endTime;
+        private double timeSinceStart;
+        private double endTime;
         private bool gameOver;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace SolarSailor
         public GameTimer(float endTime)
         {
             this.timeSinceStart = 0f;
-            this.endTime = endTime;
+            this.endTime = (double)endTime;
             gameOver = false;
         }
 
@@ -40,7 +40,7 @@ namespace SolarSailor
         /// <param name="gT">GameTime object, used to calculate time elapsed</param>
         public void Update(GameTime gT)
         {
-            float secs = (float)gT.ElapsedGameTime.TotalSeconds;
+            double secs = gT.ElapsedGameTime.TotalSeconds;
             timeSinceStart += secs;
             if (timeSinceStart > endTime)
                 gameOver = true;
@@ -50,7 +50,7 @@ namespace SolarSailor
         /// Allows adding time to the timer so you can fly longer
         /// </summary>
         /// <param name="secsToAdd">float of seconds to add to timer</param>
-        public void AddTime(float secsToAdd)
+        public void AddTime(double secsToAdd)
         {
             endTime += secsToAdd;
         }
@@ -67,8 +67,8 @@ namespace SolarSailor
         /// <summary>
         /// Returns the time left to play, useful for the HUD to display a timer
         /// </summary>
-        /// <returns>float - time left to play</returns>
-        public float GetTimeLeft()
+        /// <returns>double - time left to play</returns>
+        public double GetTimeLeft()
         {
             return endTime - timeSinceStart;
         }

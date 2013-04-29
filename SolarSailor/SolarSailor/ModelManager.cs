@@ -72,7 +72,7 @@ namespace SolarSailor
             
             //Randomize these so that each course is different
             //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
-            for (int i = 0; i <= 1000; i++)
+            for (int i = 0; i <= 100; i++)
             {
                 AsteroidMaker();
             }
@@ -157,11 +157,12 @@ namespace SolarSailor
         {
             goalExists = false;
             gameTimer.AddTime(Game1._gameTimeAddedForSuccessfulCapture);
+            Game1.hud.newDelivery();
         }
 
-        public float GetTimeRemaining()
+        public double GetTimeRemaining()
         {
-            return gameTimer.GetHashCode();
+            return gameTimer.GetTimeLeft();
         }
 
         public override void Draw(GameTime gameTime)

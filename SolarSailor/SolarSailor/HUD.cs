@@ -24,7 +24,7 @@ namespace SolarSailor
         TimeSpan convertedTimeLeft;
         public double score;
         double scoreDecrement;
-        public static double timeDecrement = 108;
+        public static double timeDecrement = 54;
 
         public Boolean start;
         KeyboardState keyBoardState;
@@ -33,6 +33,7 @@ namespace SolarSailor
         SpriteBatch spriteBatch;
         SpriteFont font;
         SpriteFont hudFont;
+
         string timeLeftString = "Time Left: ";
         string scoreString = "Score: ";
         string targetString = "Take Cargo To ";
@@ -53,6 +54,7 @@ namespace SolarSailor
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             font = Game.Content.Load<SpriteFont>("StartFont");
             hudFont = Game.Content.Load<SpriteFont>("HudFont");
+            scoreDecrement = 100; //100 pts a second
             
             base.Initialize();
             
@@ -71,14 +73,15 @@ namespace SolarSailor
                 if (keyBoardState.IsKeyDown(Keys.Space))
                 {
                     start = true;
-                    tcb = updateTime;
-                    timer = new Timer(tcb, null, 0, 100);
+                    //tcb = updateTime;
+                    //timer = new Timer(tcb, null, 0, 100);
                 }
-                //convertedTimeLeft = TimeSpan.FromMilliseconds(timeLeftInMilSec);
-                convertedTimeLeft = TimeSpan.FromMilliseconds((double)Game1.modelManager.GetTimeRemaining());
             }
-            
-            
+            else
+                updateScore(gameTime); //only update score if we've started
+
+            convertedTimeLeft = TimeSpan.FromSeconds(Game1.modelManager.GetTimeRemaining());
+
             base.Update(gameTime);
         }
         public override void Draw(GameTime gameTime)
@@ -89,47 +92,49 @@ namespace SolarSailor
                 spriteBatch.DrawString(font, "Press The Space Bar To Start Timer",
                                         new Vector2(Game.Window.ClientBounds.Width / 2-300, Game.Window.ClientBounds.Height / 2-75), Color.Red);
                 spriteBatch.DrawString(hudFont, timeLeftString + convertedTimeLeft.ToString("g"), new Vector2(10, 10), Color.WhiteSmoke);
-                spriteBatch.DrawString(hudFont, scoreString + score.ToString(), new Vector2(Game.Window.ClientBounds.Width - 195, 10), Color.WhiteSmoke);
+                spriteBatch.DrawString(hudFont, scoreString + score.ToString("N0"), new Vector2(Game.Window.ClientBounds.Width - 195, 10), Color.WhiteSmoke);
                 spriteBatch.DrawString(hudFont, targetString, new Vector2(Game.Window.ClientBounds.Width / 2 - 140, 10), Color.WhiteSmoke);
             }
             else
             {
                 spriteBatch.DrawString(hudFont, timeLeftString + convertedTimeLeft.ToString("g"), new Vector2(10, 10), Color.WhiteSmoke);
-                spriteBatch.DrawString(hudFont, scoreString + score.ToString(), new Vector2(Game.Window.ClientBounds.Width - 195, 10), Color.WhiteSmoke);
+                spriteBatch.DrawString(hudFont, scoreString + score.ToString("N0"), new Vector2(Game.Window.ClientBounds.Width - 195, 10), Color.WhiteSmoke);
                 spriteBatch.DrawString(hudFont, targetString, new Vector2(Game.Window.ClientBounds.Width/2-140, 10), Color.WhiteSmoke);
             }
             spriteBatch.End();
             base.Draw(gameTime);
         }
 
-        public void updateTime(Object state)
-        {
-            //timer is up
-            if (timeLeftInMilSec<=0)
-            {
-                timer.Dispose();
-                Game1.currentGameState = Game1.GameState.GameOver;
-            }
+        //public void updateTime(Object state)
+        //{
+        //    //timer is up
+        //    if (timeLeftInMilSec<=0)
+        //    {
+        //        timer.Dispose();
+        //        Game1.currentGameState = Game1.GameState.GameOver;
+        //    }
 
-            timeLeftInMilSec -= timeDecrement;
-            convertedTimeLeft = TimeSpan.FromMilliseconds(timeLeftInMilSec);
-            updateScore();
+        //    timeLeftInMilSec -= timeDecrement;
+        //    //convertedTimeLeft = TimeSpan.FromMilliseconds(timeLeftInMilSec);
+        //    convertedTimeLeft = TimeSpan.FromSeconds(Game1.modelManager.GetTimeRemaining());
+        //    updateScore();
             
+        //}
+
+        public void updateScore(GameTime gt)
+        {
+            float secs = (float)gt.ElapsedGameTime.TotalSeconds;
+            score -= secs * scoreDecrement;
         }
 
-        public void updateScore()
-        {
-            score -= scoreDecrement;
-        }
-
-        public void newDelivery(float timeLimit) 
+        public void newDelivery() 
         {
             
-            timeLeftInMilSec = timeLimit;
-            start = false;
+            //timeLeftInMilSec = timeLimit;
+            //start = false;
             score += 10000;
-            scoreDecrement = 108 / timeLimit;
-            scoreDecrement = scoreDecrement * 10000;
+            //scoreDecrement = 108 / timeLimit;
+            //scoreDecrement = scoreDecrement * 10000;
         }
 
     }
