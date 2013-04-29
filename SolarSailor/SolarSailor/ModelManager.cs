@@ -72,7 +72,7 @@ namespace SolarSailor
             
             //Randomize these so that each course is different
             //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
-            for (int i = 0; i <= 100; i++)
+            for (int i = 0; i <= 1000; i++)
             {
                 AsteroidMaker();
             }
@@ -240,11 +240,11 @@ namespace SolarSailor
             //Uses one random generator because otherwise we get some ridiculous problems with seeding
             //and all the asteroids end up in one nice, tight line instead of scattered everywhere.
             //--bill I added on a new vector to randomize z,y,z rotations so they are all facing the same way
-            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-            //    new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
-            //    new Vector3((randpos.Next(-10,10)),(randpos.Next(-10,10)),(randpos.Next(-10,10)))));
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-                new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500)))));
+                new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
+                new Vector3((randpos.Next(-10, 10)), (randpos.Next(-10, 10)), (randpos.Next(-10, 10)))));
+            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
+            //    new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500)))));
 
             //skybox
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),

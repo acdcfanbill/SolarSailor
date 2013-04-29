@@ -39,12 +39,12 @@ namespace SolarSailor
 
         //some static variables
         public static float _fov = 60;
-        public static float _gameLengthInSeconds = 30;
+        public static float _gameLengthInSeconds = 3000;
         public static float _gameTimeAddedForSuccessfulCapture = 10;
 
         //some people may want to invert the control of the camera's y axis
         //we could probably make this controlable in the menu
-        public static bool invertYAxis = true;
+        public static bool invertYAxis = false;
 
         //GameState info
         public enum GameState { StartUp, MainMenu, Credits, PauseMenu, NewGame, InGame, GameOver, YouWin, InstructionScreen, GameExit }

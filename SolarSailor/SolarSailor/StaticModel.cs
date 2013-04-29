@@ -85,7 +85,7 @@ namespace SolarSailor
                     be.World = mesh.ParentBone.Transform * worldMatrix;
                 }
                 mesh.Draw();
-                BoundingSphereRenderer.Render(boundingSphere, gd, Game1.camera.view, Game1.camera.projection, mesh.ParentBone.Transform * worldMatrix, Color.Red);
+                //BoundingSphereRenderer.Render(boundingSphere, gd, Game1.camera.view, Game1.camera.projection, mesh.ParentBone.Transform * worldMatrix, Color.Red);
             }
         }
 
