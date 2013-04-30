@@ -54,7 +54,7 @@ namespace SolarSailor
             SkyWorld = Matrix.CreateTranslation(position);
             //Projection = Game1.camera.projection;
             //View = Matrix.CreateLookAt(Vector3.Zero + position, tempView + position, tempUp);
-            View = Matrix.CreateLookAt(Game1.camera._pos, Game1.modelManager.GetShipPosition(), Game1.modelManager.GetShipRotation().Up);//Game1.camera._up);
+            View = Matrix.CreateLookAt(Game1.camera._pos, Game1.modelManager.GetShipPosition(), Game1.camera._up);
 
 
             base.Update(gameTime);
