@@ -120,8 +120,8 @@ namespace SolarSailor
             audioEngine = new AudioEngine(@"Content\Audio\GameAudio.xgs");
             waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
             soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
-            //trackCue = soundBank.GetCue("DST-1990");
-            //trackCue.Play();
+            trackCue = soundBank.GetCue("DST-1990");
+            trackCue.Play();
             trackCue = soundBank.GetCue("Thrusters");
             base.LoadContent();
         }
@@ -228,7 +228,7 @@ namespace SolarSailor
                     break;
                 case GameState.InGame:
                     hud.Draw(gameTime);
-                    Crosshair();
+                    //Crosshair();
                     set3DDrawing();
                     break;
                 case GameState.PauseMenu:
