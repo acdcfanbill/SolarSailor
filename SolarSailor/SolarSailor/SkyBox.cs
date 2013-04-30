@@ -48,13 +48,13 @@ namespace SolarSailor
             //SkyWorld = Game1.modelManager.getUserShip().GetWorld();
             Vector3 tempView = Game1.modelManager.GetShipPosition();// Vector3.Transform(originalView, Matrix.CreateRotationX(angleX));
             //tempView = Vector3.Transform(tempView, Matrix.CreateRotationY(angleY));
-            Vector3 tempUp = Vector3.Transform(Game1.modelManager.GetShipRotation().Up,Matrix.CreateRotationY(MathHelper.PiOver2)); // Vector3.Transform(Vector3.Up, Matrix.CreateRotationX(angleX));
+            Vector3 tempUp = Vector3.UnitZ;// Vector3.Transform(Game1.modelManager.GetShipRotation().Up, Matrix.CreateRotationY(MathHelper.PiOver2)); // Vector3.Transform(Vector3.Up, Matrix.CreateRotationX(angleX));
             //tempUp = Vector3.Transform(tempUp, Matrix.CreateRotationY(angleY));
             position = Game1.modelManager.GetShipPosition(); //+= dir * Vector3.Normalize(tempView) / 10;
             SkyWorld = Matrix.CreateTranslation(position);
             //Projection = Game1.camera.projection;
             //View = Matrix.CreateLookAt(Vector3.Zero + position, tempView + position, tempUp);
-            View = Matrix.CreateLookAt(Vector3.Zero + Game1.camera._pos, Game1.modelManager.GetShipPosition(), Vector3.Up);
+            View = Matrix.CreateLookAt(Vector3.Zero + Game1.camera._pos, Game1.modelManager.GetShipPosition(), Game1.modelManager.GetShipRotation().Up);
 
 
             base.Update(gameTime);
