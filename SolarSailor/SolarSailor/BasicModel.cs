@@ -69,6 +69,7 @@ namespace SolarSailor
             return false;
         }
 
+        //I don't know where this came from, but it caused me much consternation - bill
         public virtual Vector3 GetPosition()
         {
             return Vector3.Zero;
