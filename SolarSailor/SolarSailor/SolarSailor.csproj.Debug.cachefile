@@ -7,13 +7,13 @@ Content\textures\credits.xnb
 Content\textures\GameOverScreen.xnb
 Content\mFont.xnb
 Content\SpriteFont1.xnb
+Content\models\goalring.xnb
+Content\models\arrow.xnb
 Content\textures\DTPlogo.xnb
 Content\textures\introscreen.xnb
 Content\textures\presentsscreen.xnb
-Content\models\goalring.xnb
 Content\HudFont.xnb
 Content\StartFont.xnb
-Content\models\arrow.xnb
 Content\Audio\GameAudio.xgs
 Content\Audio\Wave Bank.xwb
 Content\Audio\Sound Bank.xsb

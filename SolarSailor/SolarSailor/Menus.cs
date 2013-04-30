@@ -44,6 +44,8 @@ namespace SolarSailor
         List<String> menuOps;
         List<String> pauseOps;
         List<String> gameOverOps;
+        List<String> instruction;
+        List<String> creditsScreen;
         int sel;
 
         //startup timing
@@ -80,6 +82,25 @@ namespace SolarSailor
             gameOverOps.Add("Instructions");
             gameOverOps.Add("Credits");
             gameOverOps.Add("Exit Game");
+
+            //Instruction screen
+            instruction = new List<string>();
+            instruction.Add("Steer your ship towards the goal by following the arrow!");
+            instruction.Add("The mouse controls the movement of your ship, the mouse wheel allows you to roll.");
+            instruction.Add("Press \"O\" to go faster, and \"L\" to slow down.");
+            instruction.Add("Complete as many goals as you can before time runs out.");
+
+            //Credits Screen
+            creditsScreen = new List<string>();
+            creditsScreen.Add("Solar Sailor Credits:");
+            creditsScreen.Add("Marc Gubbels");
+            creditsScreen.Add("Nate Lundin");
+            creditsScreen.Add("Bill Conn");
+            creditsScreen.Add("Gunnar Wiese");
+            creditsScreen.Add("Joe Von Holtum");
+            creditsScreen.Add("\n");
+            creditsScreen.Add("Also thanks to:");
+            creditsScreen.Add("Some people on the internet with decent models we could use.");
 
             //start with the top option
             sel = 0;
@@ -399,6 +420,13 @@ namespace SolarSailor
                     Game.GraphicsDevice.Clear(Color.Black);
                     menuSpriteBatch.Begin();
                     menuSpriteBatch.Draw(gameScreen, instRect, Color.White);
+                    for(int i = 0; i < instruction.Count; ++i)
+                    {
+                        menuSpriteBatch.DrawString(titleFont, instruction[i],
+                                            new Vector2(0,
+                                                         (Game.Window.ClientBounds.Height / 2) - (titleFont.MeasureString(title).Y / 2) + c), Color.WhiteSmoke);
+                        c += 20;
+                    }
                     menuSpriteBatch.End();
                     #endregion
                     break;
@@ -455,6 +483,13 @@ namespace SolarSailor
                     Game.GraphicsDevice.Clear(Color.Black);
                     menuSpriteBatch.Begin();
                     menuSpriteBatch.Draw(credits, instRect, Color.White);
+                    for (int i = 0; i < creditsScreen.Count; ++i)
+                    {
+                        menuSpriteBatch.DrawString(titleFont, creditsScreen[i],
+                                            new Vector2(0, ((Game.Window.ClientBounds.Height / 2) - titleFont.MeasureString(title).Y / 2) + c),
+                                                        Color.WhiteSmoke);
+                        c += 20;
+                    }
                     menuSpriteBatch.End();
                     #endregion
                     break;
