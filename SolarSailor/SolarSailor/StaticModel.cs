@@ -27,16 +27,19 @@ namespace SolarSailor
 
         //If I mess with it by assigning it actual values here, the initial position of the ship
         //changes accordingly.
-        Vector3 initialPosition;
+        public Vector3 position {get; protected set;}
+        BoundingSphere boundingSphere;
         float xRotation;
         float yRotation;
         float zRotation;
 
-        public StaticModel(Model m, Vector3 position, Vector3 rotation)
+        public StaticModel(Model m, Vector3 intitalPosition, Vector3 rotation)
             : base(m)
         {
-            this.initialPosition = position;
+            this.position = intitalPosition;
             xRotation = rotation.X; yRotation = rotation.Y; zRotation = rotation.Z;
+            boundingSphere.Center = intitalPosition;
+            boundingSphere.Radius = 10;
         }
         //helper constructor to allow construction with only position specified
         public StaticModel(Model m, Vector3 position)
@@ -54,10 +57,20 @@ namespace SolarSailor
 
         }
 
-        public override void Draw(Camera camera)
+        public Vector3 GetPosition()
+        {
+            return position;
+        }
+
+        public override Matrix GetWorld()
+        {
+            return Matrix.CreateRotationX(xRotation) * Matrix.CreateRotationY(yRotation) *
+                Matrix.CreateRotationZ(zRotation) * Matrix.CreateTranslation(position);
+        }
+        public void Draw(Camera camera, GraphicsDevice gd)
         {
             Matrix worldMatrix = Matrix.CreateRotationX(xRotation) * Matrix.CreateRotationY(yRotation) * 
-                Matrix.CreateRotationZ(zRotation) * Matrix.CreateTranslation(initialPosition);
+                Matrix.CreateRotationZ(zRotation) * Matrix.CreateTranslation(position);
 
             Matrix[] transforms = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -75,5 +88,33 @@ namespace SolarSailor
             }
         }
 
+        public override bool CollidesWith(Model otherModel, Matrix otherWorld)
+        {
+            //From book
+            //Loop through each ModelMesh in both objects and compare
+            //all bounding spheres for collisions.
+            //foreach (ModelMesh meshes in model.Meshes)
+            //{
+            //    foreach (ModelMesh otherMeshes in otherModel.Meshes)
+            //    {
+            //        if (meshes.BoundingSphere.Transform(
+            //            GetWorld()).Intersects(
+            //            otherMeshes.BoundingSphere.Transform(otherWorld)))
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
+            //return false;
+
+            //writing my own since this seems to be fucked
+            //-bill
+            foreach (ModelMesh otherMeshes in otherModel.Meshes)
+            {
+                if (this.boundingSphere.Intersects(otherMeshes.BoundingSphere.Transform(otherWorld)))
+                    return true;
+            }
+            return false;
+        }
     }
 }

@@ -16,8 +16,11 @@ namespace SolarSailor
     {
         //=================================================================
 
-        Vector3 position = Vector3.Zero;
+        public Vector3 position;
         Matrix shipRotation = Matrix.Identity;
+
+        ObjectiveArrow objectiveArrow;
+        Vector3 arrowOffset = new Vector3(0, 5, 0);
 
         float camHeading = 0; //zero is directly behind the ship, so it 360, hence it's deg
         float camInclination = 20; //zero is directly behind the ship, also in degrees, -90 to 90
@@ -41,11 +44,13 @@ namespace SolarSailor
 
         float secs;
 
-        public UserShip(Model m, float maxXRad, float maxYRad, float maxZRad)
+        public UserShip(Model m, Model objArrowModel, float maxXRad, float maxYRad, float maxZRad)
             :base(m)
         {
+            position = Vector3.Zero;
             secs = 0;
             this._maxXRad = maxXRad; this._maxYRad = maxYRad; this._maxZRad = maxZRad;
+            objectiveArrow = new ObjectiveArrow(objArrowModel, position + arrowOffset);
         }
 
         public void Update(GameTime gameTime, float inputXDeg, float inputYDeg, float inputZDeg, float throttlePercent)
@@ -66,7 +71,16 @@ namespace SolarSailor
             MoveForward(ref position, shipRotation, moveSpeed);
 
             UpdateCamera(moveSpeed, additionalRot);
+
+            UpdateObjectiveArrow(gameTime, shipRotation);
             
+        }
+
+        private void UpdateObjectiveArrow(GameTime gt, Matrix shipRotation)
+        {
+            Vector3 newArrowPos = Vector3.Transform(arrowOffset, shipRotation) + this.position;
+            objectiveArrow.SetPosition(newArrowPos);
+            objectiveArrow.Update(gt, this.position, Game1.modelManager.GetGoalPosition());
         }
 
         private void UpdateCamera(float forwardSpeed, Matrix rotation)
@@ -120,11 +134,28 @@ namespace SolarSailor
 
         public override Matrix GetWorld()
         {
+<<<<<<< HEAD
             return Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
+=======
+            //return Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
+            return Matrix.CreateTranslation(position);
         }
 
-        public override void Draw(Camera camera)
+        public Vector3 GetPosition()
         {
+            return position;
+>>>>>>> test
+        }
+
+        public void PushShip(Vector3 pushVector)
+        {
+            position += pushVector;
+        }
+
+        public void Draw(Camera camera, GraphicsDevice gd)
+        {
+            objectiveArrow.Draw(camera);
+
             Matrix worldMatrix = Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
  
              Matrix[] transforms = new Matrix[model.Bones.Count];
@@ -139,7 +170,9 @@ namespace SolarSailor
                      be.View = camera.view;
                      be.World = mesh.ParentBone.Transform * GetWorld();
                  }
+                 gd.RasterizerState = RasterizerState.CullNone;
                  mesh.Draw();
+                 gd.RasterizerState = RasterizerState.CullCounterClockwise;
              }
         }
 
