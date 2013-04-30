@@ -20,14 +20,17 @@ namespace SolarSailor
     {
         public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+<<<<<<< HEAD
 
         public static SkyBox skyBox;
 
+=======
         AudioEngine audioEngine;
         SoundBank soundBank;
         WaveBank waveBank;
         Cue trackCue;
         public static HUD hud;
+>>>>>>> test
         public static Menus menu;
         //graphics properties
         public static Vector2 screenSize;
@@ -58,7 +61,7 @@ namespace SolarSailor
             graphics = new GraphicsDeviceManager(this);
             //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
-            //fullscreen = true;
+            fullscreen = true;
 
             if (fullscreen)
             {
@@ -94,18 +97,20 @@ namespace SolarSailor
             Components.Add(camera);
 
             menu = new Menus(this);
+<<<<<<< HEAD
             Components.Add(menu);
 
             skyBox = new SkyBox(this);
             Components.Add(skyBox);
 
-
+            currentGameState = GameState.StartUp;
+=======
+            Components.Add(menu); 
+>>>>>>> test
             modelManager = new ModelManager(this);
             Components.Add(modelManager);
-
             hud = new HUD(this);
             Components.Add(hud);
-
             currentGameState = GameState.StartUp;
             
 
@@ -120,12 +125,16 @@ namespace SolarSailor
         {
             sampleOverlay = Content.Load<Texture2D>(@"models\sampleoverlay");
             spriteBatch = new SpriteBatch(GraphicsDevice);
+<<<<<<< HEAD
+             
+=======
             audioEngine = new AudioEngine(@"Content\Audio\GameAudio.xgs");
             waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
             soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
             //trackCue = soundBank.GetCue("DST-1990");
             //trackCue.Play();
             trackCue = soundBank.GetCue("Thrusters");
+>>>>>>> test
             base.LoadContent();
         }
 
@@ -263,8 +272,11 @@ namespace SolarSailor
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+<<<<<<< HEAD
             //GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+=======
             GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+>>>>>>> test
         }
     }
 }

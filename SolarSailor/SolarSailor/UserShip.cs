@@ -134,9 +134,17 @@ namespace SolarSailor
 
         public override Matrix GetWorld()
         {
+<<<<<<< HEAD
             return Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
+=======
             //return Matrix.CreateRotationY(MathHelper.Pi) * shipRotation * Matrix.CreateTranslation(position);
-            //return Matrix.CreateTranslation(position);
+            return Matrix.CreateTranslation(position);
+        }
+
+        public Vector3 GetPosition()
+        {
+            return position;
+>>>>>>> test
         }
 
         public void PushShip(Vector3 pushVector)
@@ -182,6 +190,11 @@ namespace SolarSailor
                 inputYDeg = _maxYRad;
             if (inputYDeg < -_maxYRad)
                 inputYDeg = -_maxYRad;
+        }
+
+        public override Vector3 GetPosition()
+        {
+            return this.position;
         }
 
         public Matrix GetRotation()

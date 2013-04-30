@@ -174,10 +174,13 @@ namespace SolarSailor
 
         public override void Draw(GameTime gameTime)
         {
+<<<<<<< HEAD
             Game1.skyBox.DrawSkyBox();
+=======
             //draw the goalring
             goalRing.Draw(Game1.camera);
 
+>>>>>>> test
             foreach (UserShip m in models)
             {
                 m.Draw(Game1.camera, Game.GraphicsDevice);
