@@ -32,6 +32,7 @@ namespace SolarSailor
         Cue trackCue;
         GameTimer gameTimer;
         GoalModel goalRing;
+        ObjectiveArrow objArrow;
 
         float x = 0f;
         float y = 0f;
@@ -65,7 +66,8 @@ namespace SolarSailor
         protected override void LoadContent()
         {
             //models.Add(new UserShip(Game.Content.Load<Model>(@"models/cube"), 1.5f, 1.5f, 1.5f));
-            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1.5f, 1.5f, 1.5f));
+            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),
+                Game.Content.Load<Model>(@"models/arrow"), 1.5f, 1.5f, 1.5f));
 
             //Still trying to figure out exactly what coordinates to pass to the constructor
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),new Vector3(-50, 20, -35)));
@@ -158,6 +160,12 @@ namespace SolarSailor
             goalExists = false;
             gameTimer.AddTime(Game1._gameTimeAddedForSuccessfulCapture);
             Game1.hud.newDelivery();
+        }
+
+        public Vector3 GetGoalPosition()
+        {
+            return goalRing.GetPosition();
+
         }
 
         public double GetTimeRemaining()
