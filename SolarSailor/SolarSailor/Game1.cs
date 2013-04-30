@@ -18,8 +18,9 @@ namespace SolarSailor
     
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        public static SkyBox skyBox;
         AudioEngine audioEngine;
         SoundBank soundBank;
         WaveBank waveBank;
@@ -100,6 +101,8 @@ namespace SolarSailor
             Components.Add(modelManager);
             hud = new HUD(this);
             Components.Add(hud);
+            skyBox = new SkyBox(this);
+            Components.Add(skyBox);
             currentGameState = GameState.StartUp;
             
 

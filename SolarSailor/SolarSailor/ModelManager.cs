@@ -174,6 +174,9 @@ namespace SolarSailor
 
         public override void Draw(GameTime gameTime)
         {
+            //draw the skybx
+            Game1.skyBox.DrawSkyBox();
+
             //draw the goalring
             goalRing.Draw(Game1.camera);
 
@@ -251,9 +254,39 @@ namespace SolarSailor
             //    new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500)))));
 
             //skybox
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-                new Vector3((randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000))),
-                new Vector3((randpos.Next(-400, 400)), (randpos.Next(-400, 400)), (randpos.Next(-700, 700)))));
+            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
+            //    new Vector3((randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000))),
+            //    new Vector3((randpos.Next(-400, 400)), (randpos.Next(-400, 400)), (randpos.Next(-700, 700)))));
+        }
+
+        /// <summary>
+        /// Helper function to return the ship's position. our controllable ship
+        /// is the first one in the model list
+        /// </summary>
+        /// <returns></returns>
+        public Vector3 GetShipPosition()
+        {
+            foreach (UserShip s in models)
+            {
+                return s.GetPosition();
+            }
+            throw new InvalidProgramException("No Usership to get Position from");
+        }
+        public Matrix GetShipRotation()
+        {
+            foreach (UserShip s in models)
+            {
+                return s.GetRotation();
+            }
+            throw new InvalidProgramException("No Usership to get rotation data from");
+        }
+        public UserShip getUserShip()
+        {
+            foreach (UserShip s in models)
+            {
+                return s;
+            }
+            throw new InvalidProgramException("No Usership to pass");
         }
     }
 }

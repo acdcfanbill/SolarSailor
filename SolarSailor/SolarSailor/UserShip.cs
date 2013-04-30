@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SolarSailor
 {
-    class UserShip : BasicModel
+    public class UserShip : BasicModel
     {
         //=================================================================
 
@@ -141,6 +141,11 @@ namespace SolarSailor
         public Vector3 GetPosition()
         {
             return position;
+        }
+
+        public Matrix GetRotation()
+        {
+            return shipRotation;
         }
 
         public void PushShip(Vector3 pushVector)
