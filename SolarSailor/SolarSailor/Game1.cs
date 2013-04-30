@@ -20,17 +20,9 @@ namespace SolarSailor
     {
         public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-<<<<<<< HEAD
 
         public static SkyBox skyBox;
 
-=======
-        AudioEngine audioEngine;
-        SoundBank soundBank;
-        WaveBank waveBank;
-        Cue trackCue;
-        public static HUD hud;
->>>>>>> test
         public static Menus menu;
         //graphics properties
         public static Vector2 screenSize;
@@ -45,8 +37,6 @@ namespace SolarSailor
 
         //some static variables
         public static float _fov = 60;
-        public static float _gameLengthInSeconds = 300;
-        public static float _gameTimeAddedForSuccessfulCapture = 10;
 
         //some people may want to invert the control of the camera's y axis
         //we could probably make this controlable in the menu
@@ -97,22 +87,14 @@ namespace SolarSailor
             Components.Add(camera);
 
             menu = new Menus(this);
-<<<<<<< HEAD
             Components.Add(menu);
 
             skyBox = new SkyBox(this);
             Components.Add(skyBox);
 
             currentGameState = GameState.StartUp;
-=======
-            Components.Add(menu); 
->>>>>>> test
             modelManager = new ModelManager(this);
             Components.Add(modelManager);
-            hud = new HUD(this);
-            Components.Add(hud);
-            currentGameState = GameState.StartUp;
-            
 
             base.Initialize();
         }
@@ -125,16 +107,7 @@ namespace SolarSailor
         {
             sampleOverlay = Content.Load<Texture2D>(@"models\sampleoverlay");
             spriteBatch = new SpriteBatch(GraphicsDevice);
-<<<<<<< HEAD
              
-=======
-            audioEngine = new AudioEngine(@"Content\Audio\GameAudio.xgs");
-            waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
-            soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
-            //trackCue = soundBank.GetCue("DST-1990");
-            //trackCue.Play();
-            trackCue = soundBank.GetCue("Thrusters");
->>>>>>> test
             base.LoadContent();
         }
 
@@ -159,66 +132,42 @@ namespace SolarSailor
                 case GameState.StartUp:
                     modelManager.Enabled = false;
                     modelManager.Visible = false;
-                    hud.Enabled = false;
-                    hud.Visible = false;
                     break;
                 case GameState.MainMenu:
                     modelManager.Enabled = false;
                     modelManager.Visible = false;
-                    hud.Enabled = false;
-                    hud.Visible = false;
                     break;
                 case GameState.NewGame:
                     modelManager = new ModelManager(this);
-                    hud = new HUD(this);
-                    hud.newDelivery();
                     Components.Add(modelManager);
-                    Components.Add(hud);
                     currentGameState = GameState.InGame;
                     break;
                 case GameState.InGame:
-                    if (!hud.start || hud.Enabled == false)
-                    {
-                        modelManager.Enabled = false;
-                        modelManager.Visible = true;
-                        hud.Enabled = true;
-                        hud.Visible = true;
-                    }
-                    else { modelManager.Enabled = true; }
-                    hud.Update(gameTime);
+                    modelManager.Enabled = true;
+                    modelManager.Visible = true;
                     break;
                 case GameState.PauseMenu:
                     modelManager.Enabled = false;
                     modelManager.Visible = false;
-                    hud.Enabled = false;
-                    hud.Visible = false;
                     break;
                 case GameState.Credits:
                     //spriteManager.Enabled = false;
                     //spriteManager.Visible = false;
-
                     break;
                 case GameState.GameOver:
                     modelManager.Enabled = false;
                     modelManager.Visible = false;
-                    hud.Enabled = false;
-                    hud.Visible = false;
-                    Components.Remove(hud);
                     Components.Remove(modelManager);
                     break;
                 case GameState.YouWin:
                     modelManager.Enabled = false;
                     modelManager.Visible = false;
-                    hud.Enabled = false;
-                    hud.Visible = false;
-                    Components.Remove(hud);
                     Components.Remove(modelManager);
                     break;
                 case GameState.GameExit:
                     this.Exit();
                     break;
             }
-            audioEngine.Update();
             base.Update(gameTime);
         }
 
@@ -235,8 +184,6 @@ namespace SolarSailor
                 case GameState.NewGame:
                     break;
                 case GameState.InGame:
-                    hud.Draw(gameTime);
-                    Crosshair();
                     set3DDrawing();
                     break;
                 case GameState.PauseMenu:
@@ -247,10 +194,6 @@ namespace SolarSailor
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
-        }
-
-        private void Crosshair()
-        {
             //Here we add 2d stuff, I suppose
             spriteBatch.Begin();
             //Tried to center this as best as I could. The static values in between
@@ -266,17 +209,13 @@ namespace SolarSailor
         }
 
         //need to setup drawing stuff for the 3d parts
-        public void set3DDrawing()
+        private void set3DDrawing()
         {
             GraphicsDevice.Clear(Color.Black);
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-<<<<<<< HEAD
             //GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-=======
-            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
->>>>>>> test
         }
     }
 }

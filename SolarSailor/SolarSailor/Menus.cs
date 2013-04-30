@@ -89,10 +89,10 @@ namespace SolarSailor
             menuFont = Game.Content.Load<SpriteFont>("mFont");
 
             //pictures for startup
-            companyScreen = Game.Content.Load<Texture2D>("textures/DTPlogo");
-            presentsScreen = Game.Content.Load<Texture2D>("textures/presentsscreen");
-            gameScreen = Game.Content.Load<Texture2D>("textures/introscreen");
-            white = Game.Content.Load<Texture2D>("textures/introscreen");
+            companyScreen = Game.Content.Load<Texture2D>("textures/black");
+            presentsScreen = Game.Content.Load<Texture2D>("textures/black");
+            gameScreen = Game.Content.Load<Texture2D>("textures/black");
+            white = Game.Content.Load<Texture2D>("textures/black");
 
             //credit scren
             credits = Game.Content.Load<Texture2D>("textures/credits");

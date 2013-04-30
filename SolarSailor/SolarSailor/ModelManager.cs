@@ -26,19 +26,12 @@ namespace SolarSailor
         MouseState mouseState;
         MouseState oldMouseState;
         Random randpos;
-        AudioEngine audioEngine;
-        SoundBank soundBank;
-        WaveBank waveBank;
-        Cue trackCue;
-        GameTimer gameTimer;
-        GoalModel goalRing;
 
         float x = 0f;
         float y = 0f;
         float z = 0f;
         float throttlePercent;
         bool rmb;
-        bool goalExists;
 
         public ModelManager(Game game)
             : base(game)
@@ -55,33 +48,24 @@ namespace SolarSailor
             throttlePercent = 0.0f;
             randpos = new Random();
 
-            gameTimer = new GameTimer(Game1._gameLengthInSeconds);
-
-            //BoundingSphereRenderer.InitializeGraphics(Game.GraphicsDevice, 30);
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             //models.Add(new UserShip(Game.Content.Load<Model>(@"models/cube"), 1.5f, 1.5f, 1.5f));
-            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),
-                Game.Content.Load<Model>(@"models/arrow"), 1.5f, 1.5f, 1.5f));
+            models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"), 1.5f, 1.5f, 1.5f));
 
             //Still trying to figure out exactly what coordinates to pass to the constructor
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),new Vector3(-50, 20, -35)));
             
             //Randomize these so that each course is different
             //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
-            for (int i = 0; i <= 500; i++)
+            for (int i = 0; i <= 1000; i++)
             {
                 AsteroidMaker();
             }
-            audioEngine = new AudioEngine(@"Content\Audio\GameAudio.xgs");
-            waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
-            soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
-            trackCue = soundBank.GetCue("Fusion shot");
-            trackCue = soundBank.GetCue("Thrusters");
+
             base.LoadContent();
         }
 
@@ -91,25 +75,16 @@ namespace SolarSailor
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            if (!goalExists)
-            {
-                GoalMaker();
-            }
-
-            //update the gameTimer
-            gameTimer.Update(gameTime);
-            if (gameTimer.CheckTimer())
-                Game1.currentGameState = Game1.GameState.GameOver;
-
             keyboardState = Keyboard.GetState();
 
             //this is to figure out how much to move the ship/camera
             getMouseInput(ref x, ref y, ref z, ref rmb);
 
-            if (keyboardState.IsKeyUp(Keys.O) && oldKeyboardState.IsKeyDown(Keys.O))
+            if (keyboardState.IsKeyUp(Keys.Add) && oldKeyboardState.IsKeyDown(Keys.Add))
                 throttlePercent = Math.Min(throttlePercent + .05f, 1.0f);
-            if (keyboardState.IsKeyUp(Keys.L) && oldKeyboardState.IsKeyDown(Keys.L))
+            if (keyboardState.IsKeyUp(Keys.Subtract) && oldKeyboardState.IsKeyDown(Keys.Subtract))
                 throttlePercent = Math.Max(throttlePercent - .05f, 0.0f);
+            
             //have to check and see if we are moving the camera first
             if(rmb)
             {
@@ -118,78 +93,36 @@ namespace SolarSailor
 
                 x = 0; y = 0; z = 0;//reset all these to zero so the ships direction doesnt change
             }
-
-            //Doesn't update anything currently.
-            foreach (StaticModel sm in staticModel)
-            {
-                sm.Update(gameTime);
-                if (sm.CollidesWith(models[0].model, models[0].GetWorld()))
-                {
-                    UserShip us = (UserShip)models[0];
-                    Vector3 pushDir = sm.GetPosition() - us.GetPosition();
-                    pushDir.Normalize();
-                    pushDir *= -2;
-                    us.PushShip(pushDir);
-
-                   throttlePercent = 0; 
-                   soundBank.PlayCue("Fusion shot");
-
-
-                    
-                }
-            }
             //do ship's update
             foreach (UserShip m in models)
             {
                 m.Update(gameTime, x, y, z, throttlePercent);
-                if(goalRing.CollidesWith(m.model, m.GetWorld()))
-                    SuccessfulCapture();
                 //m.Update();
+            }
+            //Doesn't update anything currently.
+            foreach (StaticModel sm in staticModel)
+            {
+                sm.Update(gameTime);
             }
 
             oldKeyboardState = keyboardState;
-            soundBank.PlayCue("Thrusters");
-            audioEngine.Update();
 
             base.Update(gameTime);
         }
 
-        private void SuccessfulCapture()
-        {
-            goalExists = false;
-            gameTimer.AddTime(Game1._gameTimeAddedForSuccessfulCapture);
-            Game1.hud.newDelivery();
-        }
-
-        public Vector3 GetGoalPosition()
-        {
-            return goalRing.GetPosition();
-
-        }
-
-        public double GetTimeRemaining()
-        {
-            return gameTimer.GetTimeLeft();
-        }
-
         public override void Draw(GameTime gameTime)
         {
-<<<<<<< HEAD
             Game1.skyBox.DrawSkyBox();
-=======
-            //draw the goalring
-            goalRing.Draw(Game1.camera);
-
->>>>>>> test
             foreach (UserShip m in models)
             {
-                m.Draw(Game1.camera, Game.GraphicsDevice);
+                m.Draw(Game1.camera);
             }
 
             foreach (StaticModel sm in staticModel)
             {
-                sm.Draw(Game1.camera, Game.GraphicsDevice);
+                sm.Draw(Game1.camera);
             }
+
             base.Draw(gameTime);
         }
 
@@ -228,27 +161,6 @@ namespace SolarSailor
             oldMouseState = Mouse.GetState();
         }
 
-        private void GoalMaker()
-        {
-            if (goalExists)
-                return;
-            goalExists = true;
-            bool collision = false;
-            do
-            {
-                collision = false;
-                goalRing = new GoalModel(Game.Content.Load<Model>(@"models/goalring"),
-                     new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
-                     new Vector3((randpos.Next(-10, 10)), (randpos.Next(-10, 10)), (randpos.Next(-10, 10))));
-                foreach (StaticModel sm in staticModel)
-                {
-                    if(sm.CollidesWith(goalRing.model,goalRing.GetWorld()))
-                        collision = true;
-                }
-            } while (collision);
-
-        }
-
         private void AsteroidMaker()
         {
             //Good god look at all those end parentheses.
@@ -257,14 +169,7 @@ namespace SolarSailor
             //--bill I added on a new vector to randomize z,y,z rotations so they are all facing the same way
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
                 new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
-                new Vector3((randpos.Next(-10, 10)), (randpos.Next(-10, 10)), (randpos.Next(-10, 10)))));
-            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-            //    new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500)))));
-
-            //skybox
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-                new Vector3((randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000))),
-                new Vector3((randpos.Next(-400, 400)), (randpos.Next(-400, 400)), (randpos.Next(-700, 700)))));
+                new Vector3((randpos.Next(-10,10)),(randpos.Next(-10,10)),(randpos.Next(-10,10)))));
         }
 
         /// <summary>

@@ -49,21 +49,19 @@ namespace SolarSailor
         //==========================================================
         //This likely needs to be changed to work
         //==========================================================
-        public virtual bool CollidesWith(Model otherModel, Matrix otherWorld)
+        public bool CollidesWith(Model otherModel, Matrix otherWorld)
         {
             //From book
             //Loop through each ModelMesh in both objects and compare
             //all bounding spheres for collisions.
             foreach (ModelMesh meshes in model.Meshes)
             {
-                foreach (ModelMesh otherMeshes in otherModel.Meshes)
+                foreach (ModelMesh otherMeshes in model.Meshes)
                 {
                     if (meshes.BoundingSphere.Transform(
                         GetWorld()).Intersects(
                         otherMeshes.BoundingSphere.Transform(otherWorld)))
-                    {
                         return true;
-                    }
                 }
             }
             return false;
