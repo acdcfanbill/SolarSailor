@@ -57,11 +57,6 @@ namespace SolarSailor
 
         }
 
-        public Vector3 GetPosition()
-        {
-            return position;
-        }
-
         public override Matrix GetWorld()
         {
             return Matrix.CreateRotationX(xRotation) * Matrix.CreateRotationY(yRotation) *
