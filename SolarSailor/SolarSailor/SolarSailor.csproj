@@ -109,7 +109,7 @@
   <ItemGroup>
     <Compile Include="BasicModel.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="Game1Backrefrence.cs" />
+    <Compile Include="SkyBoxBackrefrence.cs" />
     <Compile Include="Menus.cs" />
     <Compile Include="ModelManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -51,7 +51,7 @@ namespace SolarSailor
             graphics = new GraphicsDeviceManager(this);
             //graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
-            //fullscreen = true;
+            fullscreen = true;
 
             if (fullscreen)
             {
