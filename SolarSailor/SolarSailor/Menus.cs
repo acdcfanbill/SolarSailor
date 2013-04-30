@@ -86,7 +86,10 @@ namespace SolarSailor
             //Instruction screen
             instruction = new List<string>();
             instruction.Add("Steer your ship towards the goal by following the arrow!");
-            instruction.Add("The mouse controls the movement of your ship, the mouse wheel allows you to roll.");
+            instruction.Add("The mouse controls the movement of your ship:");
+            instruction.Add("Right Mouse Button: Free Camera Look");
+            instruction.Add("Left Mouse Button: NOTHING! HAH!");
+            instruction.Add("Mouse Wheel: Roll the ship");
             instruction.Add("Press \"O\" to go faster, and \"L\" to slow down.");
             instruction.Add("Complete as many goals as you can before time runs out.");
 
