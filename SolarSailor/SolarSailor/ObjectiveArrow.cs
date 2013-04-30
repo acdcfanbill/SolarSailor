@@ -52,7 +52,7 @@ namespace SolarSailor
 
         public override void Draw(Camera camera)
         {
-            Matrix worldMatrix = Matrix.CreateRotationZ(MathHelper.Pi) * arrowRotation * Matrix.CreateTranslation(position);
+            Matrix worldMatrix = Matrix.CreateTranslation(-2*Vector3.UnitY) * Matrix.CreateRotationZ(MathHelper.Pi) * arrowRotation * Matrix.CreateTranslation(position);
 
             Matrix[] transforms = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transforms);

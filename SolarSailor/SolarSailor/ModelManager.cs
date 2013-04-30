@@ -32,7 +32,6 @@ namespace SolarSailor
         Cue trackCue;
         GameTimer gameTimer;
         GoalModel goalRing;
-        ObjectiveArrow objArrow;
 
         float x = 0f;
         float y = 0f;
@@ -58,7 +57,7 @@ namespace SolarSailor
 
             gameTimer = new GameTimer(Game1._gameLengthInSeconds);
 
-            BoundingSphereRenderer.InitializeGraphics(Game.GraphicsDevice, 30);
+            //BoundingSphereRenderer.InitializeGraphics(Game.GraphicsDevice, 30);
 
             base.Initialize();
         }
@@ -74,7 +73,7 @@ namespace SolarSailor
             
             //Randomize these so that each course is different
             //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
-            for (int i = 0; i <= 100; i++)
+            for (int i = 0; i <= 500; i++)
             {
                 AsteroidMaker();
             }
@@ -180,21 +179,11 @@ namespace SolarSailor
 
             foreach (UserShip m in models)
             {
-                m.Draw(Game1.camera);
-                foreach (ModelMesh meshes in m.model.Meshes)
-                {
-                    //BoundingSphereRenderer(meshes.BoundingSphere);
-                    //BoundingSphereRenderer.Render(meshes.BoundingSphere, Game.GraphicsDevice, Game1.camera.view, Game1.camera.projection, Color.Red);
-                }
+                m.Draw(Game1.camera, Game.GraphicsDevice);
             }
 
             foreach (StaticModel sm in staticModel)
             {
-                //foreach (ModelMesh meshes in sm.model.Meshes)
-                //{
-                //    //BoundingSphereRenderer(meshes.BoundingSphere);
-                //    BoundingSphereRenderer.Render(meshes.BoundingSphere, Game.GraphicsDevice, Game1.camera.view, Game1.camera.projection, Color.Red);
-                //}
                 sm.Draw(Game1.camera, Game.GraphicsDevice);
             }
             base.Draw(gameTime);
@@ -236,6 +225,7 @@ namespace SolarSailor
             bool collision = false;
             do
             {
+                collision = false;
                 goalRing = new GoalModel(Game.Content.Load<Model>(@"models/goalring"),
                      new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
                      new Vector3((randpos.Next(-10, 10)), (randpos.Next(-10, 10)), (randpos.Next(-10, 10))));

@@ -225,6 +225,7 @@ namespace SolarSailor
                     break;
                 case GameState.InGame:
                     hud.Draw(gameTime);
+                    Crosshair();
                     set3DDrawing();
                     break;
                 case GameState.PauseMenu:
@@ -235,6 +236,10 @@ namespace SolarSailor
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        private void Crosshair()
+        {
             //Here we add 2d stuff, I suppose
             spriteBatch.Begin();
             //Tried to center this as best as I could. The static values in between
@@ -250,13 +255,13 @@ namespace SolarSailor
         }
 
         //need to setup drawing stuff for the 3d parts
-        private void set3DDrawing()
+        public void set3DDrawing()
         {
             GraphicsDevice.Clear(Color.Black);
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
         }
     }
 }

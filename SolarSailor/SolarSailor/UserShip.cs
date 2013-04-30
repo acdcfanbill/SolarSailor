@@ -148,7 +148,7 @@ namespace SolarSailor
             position += pushVector;
         }
 
-        public override void Draw(Camera camera)
+        public void Draw(Camera camera, GraphicsDevice gd)
         {
             objectiveArrow.Draw(camera);
 
@@ -166,7 +166,9 @@ namespace SolarSailor
                      be.View = camera.view;
                      be.World = mesh.ParentBone.Transform * worldMatrix;
                  }
+                 gd.RasterizerState = RasterizerState.CullNone;
                  mesh.Draw();
+                 gd.RasterizerState = RasterizerState.CullCounterClockwise;
              }
         }
 

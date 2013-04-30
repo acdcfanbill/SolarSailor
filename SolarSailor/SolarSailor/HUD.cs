@@ -20,16 +20,12 @@ namespace SolarSailor
     public class HUD : Microsoft.Xna.Framework.DrawableGameComponent
     {
         //time and score variables
-        double timeLeftInMilSec;
         TimeSpan convertedTimeLeft;
         public double score;
         double scoreDecrement;
-        public static double timeDecrement = 54;
 
         public Boolean start;
         KeyboardState keyBoardState;
-        Timer timer;
-        TimerCallback tcb;
         SpriteBatch spriteBatch;
         SpriteFont font;
         SpriteFont hudFont;

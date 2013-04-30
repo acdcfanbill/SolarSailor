@@ -85,7 +85,6 @@ namespace SolarSailor
                     be.World = mesh.ParentBone.Transform * worldMatrix;
                 }
                 mesh.Draw();
-                //BoundingSphereRenderer.Render(boundingSphere, gd, Game1.camera.view, Game1.camera.projection, mesh.ParentBone.Transform * worldMatrix, Color.Red);
             }
         }
 
@@ -109,6 +108,7 @@ namespace SolarSailor
             //return false;
 
             //writing my own since this seems to be fucked
+            //-bill
             foreach (ModelMesh otherMeshes in otherModel.Meshes)
             {
                 if (this.boundingSphere.Intersects(otherMeshes.BoundingSphere.Transform(otherWorld)))
