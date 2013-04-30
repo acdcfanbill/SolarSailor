@@ -134,8 +134,6 @@ namespace SolarSailor
                    throttlePercent = 0; 
                    soundBank.PlayCue("Fusion shot");
 
-
-                    
                 }
             }
             //do ship's update
@@ -174,13 +172,9 @@ namespace SolarSailor
 
         public override void Draw(GameTime gameTime)
         {
-<<<<<<< HEAD
             Game1.skyBox.DrawSkyBox();
-=======
             //draw the goalring
             goalRing.Draw(Game1.camera);
-
->>>>>>> test
             foreach (UserShip m in models)
             {
                 m.Draw(Game1.camera, Game.GraphicsDevice);
@@ -262,9 +256,9 @@ namespace SolarSailor
             //    new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500)))));
 
             //skybox
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-                new Vector3((randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000))),
-                new Vector3((randpos.Next(-400, 400)), (randpos.Next(-400, 400)), (randpos.Next(-700, 700)))));
+            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
+            //    new Vector3((randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000))),
+            //    new Vector3((randpos.Next(-400, 400)), (randpos.Next(-400, 400)), (randpos.Next(-700, 700)))));
         }
 
         /// <summary>
