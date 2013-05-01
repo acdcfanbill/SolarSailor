@@ -75,7 +75,7 @@ namespace SolarSailor
             
             //Randomize these so that each course is different
             //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
-            for (int i = 0; i <= 500; i++)
+            for (int i = 0; i <= 1500; i++)
             {
                 AsteroidMaker();
             }

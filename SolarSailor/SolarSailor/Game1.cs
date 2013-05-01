@@ -42,7 +42,7 @@ namespace SolarSailor
 
         //some static variables
         public static float _fov = 60;
-        public static float _gameLengthInSeconds = 5;
+        public static float _gameLengthInSeconds = 30;
         public static float _gameTimeAddedForSuccessfulCapture = 10;
 
         //some people may want to invert the control of the camera's y axis
