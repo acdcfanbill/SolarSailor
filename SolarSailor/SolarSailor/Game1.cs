@@ -25,6 +25,8 @@ namespace SolarSailor
         SoundBank soundBank;
         WaveBank waveBank;
         Cue trackCue;
+        Cue menuCue;
+        public static Cue thrustCue;
         public static HUD hud;
         public static Menus menu;
         //graphics properties
@@ -40,7 +42,7 @@ namespace SolarSailor
 
         //some static variables
         public static float _fov = 60;
-        public static float _gameLengthInSeconds = 300;
+        public static float _gameLengthInSeconds = 5;
         public static float _gameTimeAddedForSuccessfulCapture = 10;
 
         //some people may want to invert the control of the camera's y axis
@@ -120,9 +122,10 @@ namespace SolarSailor
             audioEngine = new AudioEngine(@"Content\Audio\GameAudio.xgs");
             waveBank = new WaveBank(audioEngine, @"Content\Audio\Wave Bank.xwb");
             soundBank = new SoundBank(audioEngine, @"Content\Audio\Sound Bank.xsb");
+            menuCue = soundBank.GetCue("dxhr_main_menu");
             trackCue = soundBank.GetCue("DST-1990");
-            trackCue.Play();
-            trackCue = soundBank.GetCue("Thrusters");
+            thrustCue = soundBank.GetCue("Thrusters");
+            thrustCue.Play();
             base.LoadContent();
         }
 
@@ -153,12 +156,18 @@ namespace SolarSailor
                     modelManager.Visible = false;
                     hud.Enabled = false;
                     hud.Visible = false;
+                    if(!menuCue.IsPlaying)
+                        menuCue.Play();
                     break;
                 case GameState.MainMenu:
                     modelManager.Enabled = false;
                     modelManager.Visible = false;
                     hud.Enabled = false;
                     hud.Visible = false;
+                    if (menuCue.IsPaused)
+                    {
+                        menuCue.Play();
+                    }
                     break;
                 case GameState.NewGame:
                     modelManager = new ModelManager(this);
@@ -167,6 +176,8 @@ namespace SolarSailor
                     Components.Add(modelManager);
                     Components.Add(hud);
                     currentGameState = GameState.InGame;
+                    menuCue.Pause();
+                    trackCue.Play();
                     break;
                 case GameState.InGame:
                     if (!hud.start || hud.Enabled == false)
@@ -177,6 +188,9 @@ namespace SolarSailor
                         hud.Visible = true;
                     }
                     else { modelManager.Enabled = true; }
+                    menuCue.Pause();
+                    if (trackCue.IsPaused)
+                        trackCue.Resume();
                     hud.Update(gameTime);
                     break;
                 case GameState.PauseMenu:
@@ -184,6 +198,11 @@ namespace SolarSailor
                     modelManager.Visible = false;
                     hud.Enabled = false;
                     hud.Visible = false;
+                    if (menuCue.IsPaused)
+                    {
+                        menuCue.Resume();
+                    }
+                    trackCue.Pause();
                     break;
                 case GameState.Credits:
                     //spriteManager.Enabled = false;

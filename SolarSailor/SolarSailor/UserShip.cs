@@ -51,6 +51,7 @@ namespace SolarSailor
             secs = 0;
             this._maxXRad = maxXRad; this._maxYRad = maxYRad; this._maxZRad = maxZRad;
             objectiveArrow = new ObjectiveArrow(objArrowModel, position + arrowOffset);
+            
         }
 
         public void Update(GameTime gameTime, float inputXDeg, float inputYDeg, float inputZDeg, float throttlePercent)

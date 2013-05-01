@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-
+using System.IO;
 
 namespace SolarSailor
 {
@@ -32,6 +32,9 @@ namespace SolarSailor
         Cue trackCue;
         GameTimer gameTimer;
         GoalModel goalRing;
+
+        FileStream fs;
+        StreamWriter sw;
 
         float x = 0f;
         float y = 0f;
@@ -64,12 +67,11 @@ namespace SolarSailor
 
         protected override void LoadContent()
         {
-            //models.Add(new UserShip(Game.Content.Load<Model>(@"models/cube"), 1.5f, 1.5f, 1.5f));
             models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),
-                Game.Content.Load<Model>(@"models/arrow"), 1.5f, 1.5f, 1.5f));
+                Game.Content.Load<Model>(@"models/arrow"), 3f, 3f, 3f));
 
             //Still trying to figure out exactly what coordinates to pass to the constructor
-            staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),new Vector3(-50, 20, -35)));
+            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),new Vector3(-50, 20, -35)));
             
             //Randomize these so that each course is different
             //Also, add a skin to them. I tried to do it but Blender was a bit confusing.
@@ -99,8 +101,10 @@ namespace SolarSailor
             //update the gameTimer
             gameTimer.Update(gameTime);
             if (gameTimer.CheckTimer())
+            {
+                SaveScore();
                 Game1.currentGameState = Game1.GameState.GameOver;
-
+            }
             keyboardState = Keyboard.GetState();
 
             //this is to figure out how much to move the ship/camera
@@ -144,7 +148,6 @@ namespace SolarSailor
                 m.Update(gameTime, x, y, z, throttlePercent);
                 if(goalRing.CollidesWith(m.model, m.GetWorld()))
                     SuccessfulCapture();
-                //m.Update();
             }
 
             oldKeyboardState = keyboardState;
@@ -250,13 +253,6 @@ namespace SolarSailor
             staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
                 new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500))),
                 new Vector3((randpos.Next(-10, 10)), (randpos.Next(-10, 10)), (randpos.Next(-10, 10)))));
-            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-            //    new Vector3((randpos.Next(-500, 500)), (randpos.Next(-500, 500)), (randpos.Next(-500, 500)))));
-
-            //skybox
-            //staticModel.Add(new StaticModel(Game.Content.Load<Model>(@"models/spacerock"),
-            //    new Vector3((randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000)), (randpos.Next(-25000, 25000))),
-            //    new Vector3((randpos.Next(-400, 400)), (randpos.Next(-400, 400)), (randpos.Next(-700, 700)))));
         }
 
         /// <summary>
@@ -287,6 +283,17 @@ namespace SolarSailor
                 return s;
             }
             throw new InvalidProgramException("No Usership to pass");
+        }
+
+        public void SaveScore()
+        {
+            fs = new FileStream(Game.Content.RootDirectory.ToString() + "/Scores.txt", FileMode.Open);
+            sw = new StreamWriter(fs);
+
+            sw.WriteLine(Game1.hud.score.ToString());
+
+            sw.Close();
+            fs.Close();
         }
     }
 }
