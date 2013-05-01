@@ -102,7 +102,7 @@ namespace SolarSailor
             gameTimer.Update(gameTime);
             if (gameTimer.CheckTimer())
             {
-                SaveScore();
+                //SaveScore();
                 Game1.currentGameState = Game1.GameState.GameOver;
             }
             keyboardState = Keyboard.GetState();
@@ -136,10 +136,7 @@ namespace SolarSailor
                     us.PushShip(pushDir);
 
                    throttlePercent = 0; 
-                   soundBank.PlayCue("Fusion shot");
-
-
-                    
+                   soundBank.PlayCue("Fusion shot");                    
                 }
             }
             //do ship's update
@@ -285,15 +282,15 @@ namespace SolarSailor
             throw new InvalidProgramException("No Usership to pass");
         }
 
-        public void SaveScore()
-        {
-            fs = new FileStream(Game.Content.RootDirectory.ToString() + "/Scores.txt", FileMode.Open);
-            sw = new StreamWriter(fs);
+        //public void SaveScore()
+        //{
+        //    fs = new FileStream(Game.Content.RootDirectory.ToString() + "/Scores.txt", FileMode.Open);
+        //    sw = new StreamWriter(fs);
 
-            sw.WriteLine(Game1.hud.score.ToString());
+        //    sw.WriteLine(Game1.hud.score.ToString());
 
-            sw.Close();
-            fs.Close();
-        }
+        //    sw.Close();
+        //    fs.Close();
+        //}
     }
 }

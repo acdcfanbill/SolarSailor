@@ -32,7 +32,7 @@ namespace SolarSailor
 
         string timeLeftString = "Time Left: ";
         string scoreString = "Score: ";
-        string targetString = "Take Cargo To ";
+        string targetString = "--Get the Ring!--";
         
         public HUD(Game game)
             : base(game)

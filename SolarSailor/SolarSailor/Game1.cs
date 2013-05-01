@@ -33,7 +33,7 @@ namespace SolarSailor
         public static Vector2 screenSize;
         private int preferredWidth;
         private int preferredHeight;
-        private bool fullscreen = false;
+        private bool fullscreen = false; //defaults to false, set to true below if you want fs, or comment out if not
 
         public static ModelManager modelManager;
         public static Camera camera;
@@ -166,7 +166,7 @@ namespace SolarSailor
                     hud.Visible = false;
                     if (menuCue.IsPaused)
                     {
-                        menuCue.Play();
+                        menuCue.Resume();
                     }
                     break;
                 case GameState.NewGame:
@@ -177,7 +177,10 @@ namespace SolarSailor
                     Components.Add(hud);
                     currentGameState = GameState.InGame;
                     menuCue.Pause();
-                    trackCue.Play();
+                    if (trackCue.IsPaused)
+                        trackCue.Resume();
+                    else
+                        trackCue.Play();
                     break;
                 case GameState.InGame:
                     if (!hud.start || hud.Enabled == false)
@@ -216,6 +219,7 @@ namespace SolarSailor
                     hud.Visible = false;
                     Components.Remove(hud);
                     Components.Remove(modelManager);
+                    trackCue.Pause();
                     break;
                 case GameState.YouWin:
                     modelManager.Enabled = false;
@@ -224,6 +228,7 @@ namespace SolarSailor
                     hud.Visible = false;
                     Components.Remove(hud);
                     Components.Remove(modelManager);
+                    trackCue.Pause();
                     break;
                 case GameState.GameExit:
                     this.Exit();
