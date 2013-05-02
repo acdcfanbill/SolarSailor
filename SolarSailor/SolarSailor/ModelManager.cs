@@ -60,11 +60,15 @@ namespace SolarSailor
 
             gameTimer = new GameTimer(Game1._gameLengthInSeconds);
 
+            //this was in for debugging, it's been removed from all Model class drawing routines
             //BoundingSphereRenderer.InitializeGraphics(Game.GraphicsDevice, 30);
 
             base.Initialize();
         }
 
+        /// <summary>
+        /// load content, models, make asteroids, load sounds
+        /// </summary>
         protected override void LoadContent()
         {
             models.Add(new UserShip(Game.Content.Load<Model>(@"models/SentinelSVForBlog"),
@@ -154,24 +158,10 @@ namespace SolarSailor
             base.Update(gameTime);
         }
 
-        private void SuccessfulCapture()
-        {
-            goalExists = false;
-            gameTimer.AddTime(Game1._gameTimeAddedForSuccessfulCapture);
-            Game1.hud.newDelivery();
-        }
-
-        public Vector3 GetGoalPosition()
-        {
-            return goalRing.GetPosition();
-
-        }
-
-        public double GetTimeRemaining()
-        {
-            return gameTimer.GetTimeLeft();
-        }
-
+        /// <summary>
+        /// Draw the world
+        /// </summary>
+        /// <param name="gameTime">gameTime object</param>
         public override void Draw(GameTime gameTime)
         {
             //draw the skybx
@@ -192,10 +182,18 @@ namespace SolarSailor
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// get the mouse input, puts movemetn into pass by ref variables
+        /// </summary>
+        /// <param name="x">change in x</param>
+        /// <param name="y">change in y</param>
+        /// <param name="z">change in mouse wheel</param>
+        /// <param name="rmb">whether or not right mouse is down</param>
         private void getMouseInput(ref float x, ref float y, ref float z, ref bool rmb)
         {
             //Noticed that the ship steers from the nose, rather than from
             //the midpoint or cockpit or whatever.
+            //This was fixed by moving the 'origin' in the ship model - bill
             mouseState = Mouse.GetState();
             if (mouseState.RightButton == ButtonState.Pressed)
                 rmb = true;
@@ -208,7 +206,6 @@ namespace SolarSailor
 
             //speed adjust
             //float speed = 5;
-            //Y has -speed to fix inversion issue. Personal preference I suppose?
             //x *= speed; y *= speed; z *= speed;
 
             //may need to adjust camera/ship control
@@ -253,10 +250,39 @@ namespace SolarSailor
         }
 
         /// <summary>
+        /// Helper method, resets stuff due to us 'capturing' a goal
+        /// </summary>
+        private void SuccessfulCapture()
+        {
+            goalExists = false;
+            gameTimer.AddTime(Game1._gameTimeAddedForSuccessfulCapture);
+            Game1.hud.newDelivery();
+        }
+
+        /// <summary>
+        /// returns the posision of hte goal
+        /// </summary>
+        /// <returns>Vector3 position of the goal</returns>
+        public Vector3 GetGoalPosition()
+        {
+            return goalRing.GetPosition();
+
+        }
+
+        /// <summary>
+        /// returns the time remaining in the game, hud needs this
+        /// </summary>
+        /// <returns>double, time left in seconds</returns>
+        public double GetTimeRemaining()
+        {
+            return gameTimer.GetTimeLeft();
+        }
+
+        /// <summary>
         /// Helper function to return the ship's position. our controllable ship
         /// is the first one in the model list
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Vector3 of ship position</returns>
         public Vector3 GetShipPosition()
         {
             foreach (UserShip s in models)
@@ -265,6 +291,12 @@ namespace SolarSailor
             }
             throw new InvalidProgramException("No Usership to get Position from");
         }
+
+        /// <summary>
+        /// Helper function to return the ships rotation.  all these ship orientation
+        /// methods are for the supid skybox 
+        /// </summary>
+        /// <returns>Matrix that describes the current ship rotation</returns>
         public Matrix GetShipRotation()
         {
             foreach (UserShip s in models)
@@ -273,6 +305,11 @@ namespace SolarSailor
             }
             throw new InvalidProgramException("No Usership to get rotation data from");
         }
+
+        /// <summary>
+        /// Returns the Usership, I don't know if we actually used this...
+        /// </summary>
+        /// <returns>UserShip class</returns>
         public UserShip getUserShip()
         {
             foreach (UserShip s in models)
@@ -282,6 +319,7 @@ namespace SolarSailor
             throw new InvalidProgramException("No Usership to pass");
         }
 
+        //unimplimented due to time constraints
         //public void SaveScore()
         //{
         //    fs = new FileStream(Game.Content.RootDirectory.ToString() + "/Scores.txt", FileMode.Open);

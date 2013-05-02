@@ -84,6 +84,12 @@ namespace SolarSailor
             objectiveArrow.Update(gt, this.position, Game1.modelManager.GetGoalPosition());
         }
 
+        /// <summary>
+        /// update position of the camera based on position of ship and where the camera vector 
+        /// currently ponits
+        /// </summary>
+        /// <param name="forwardSpeed">i don'tthink i need this anymore</param>
+        /// <param name="rotation">ships rotation</param>
         private void UpdateCamera(float forwardSpeed, Matrix rotation)
         {
             Vector3 camAngle = new Vector3(1,0,0);
@@ -117,6 +123,7 @@ namespace SolarSailor
                 camDistance = minZoom;
 
             //I'm not convinced Clamp actually works...
+            //previous lines are my clamp
             MathHelper.Clamp(camInclination, minPitch, maxPitch);
             MathHelper.Clamp(camDistance, minZoom, maxZoom);
         }
@@ -124,9 +131,9 @@ namespace SolarSailor
         /// <summary>
         /// Function to move the ship forward
         /// </summary>
-        /// <param name="position"></param>
-        /// <param name="rotation"></param>
-        /// <param name="forwardSpeed"></param>
+        /// <param name="position">refrence, ships position</param>
+        /// <param name="rotation">current ship rotation</param>
+        /// <param name="forwardSpeed">our current forward speed</param>
         private void MoveForward(ref Vector3 position, Matrix rotation, float forwardSpeed)
         {
             Vector3 addVector = Vector3.Transform(new Vector3(-1, 0, 0), rotation);
@@ -139,21 +146,38 @@ namespace SolarSailor
             return Matrix.CreateTranslation(position);
         }
 
+        /// <summary>
+        /// helper funciton, returns the ships position
+        /// </summary>
+        /// <returns>Vector3, ships possition</returns>
         public Vector3 GetPosition()
         {
             return position;
         }
 
+        /// <summary>
+        /// helper funciton, returns the ships current rotation matrix
+        /// </summary>
+        /// <returns>matrix describing ships current rotation</returns>
         public Matrix GetRotation()
         {
             return shipRotation;
         }
 
+        /// <summary>
+        /// helper function to push ship in some direction after a collison
+        /// </summary>
+        /// <param name="pushVector">Vector3, direciton to push ship</param>
         public void PushShip(Vector3 pushVector)
         {
             position += pushVector;
         }
 
+        /// <summary>
+        /// draw method for the ship
+        /// </summary>
+        /// <param name="camera">need's the camera to draw</param>
+        /// <param name="gd">graphics device, need to adjust Cull types</param>
         public void Draw(Camera camera, GraphicsDevice gd)
         {
             objectiveArrow.Draw(camera);
@@ -178,6 +202,13 @@ namespace SolarSailor
              }
         }
 
+        /// <summary>
+        /// clamp rotation for maximum turn speeds for ship.  I see I mixed degrees and radians, i htink
+        /// it's alrady in radians, i just didn't change the names. 
+        /// </summary>
+        /// <param name="inputXDeg"></param>
+        /// <param name="inputYDeg"></param>
+        /// <param name="inputZDeg"></param>
         private void ClampRotation(ref float inputXDeg, ref float inputYDeg, ref float inputZDeg)
         {
             if (inputZDeg > _maxZRad)

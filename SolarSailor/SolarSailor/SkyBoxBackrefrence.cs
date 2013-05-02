@@ -11,6 +11,11 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SolarSailor
 {
+    /// <summary>
+    /// other partial class for Skybox, I think i made the normals ponit the wrong way
+    /// in the skybox, so i had to reverse the image of hte earth to make it look correct from
+    /// 'inside' the skybox.
+    /// </summary>
     public partial class SkyBox : Microsoft.Xna.Framework.GameComponent
     {
         #region Constants

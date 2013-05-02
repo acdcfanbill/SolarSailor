@@ -45,11 +45,19 @@ namespace SolarSailor
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// provide method so the usership can set the position of the arrow
+        /// </summary>
+        /// <param name="newPos">positin to set</param>
         public void SetPosition(Vector3 newPos)
         {
             this.position = newPos;
         }
 
+        /// <summary>
+        /// method for arrow to draw itself
+        /// </summary>
+        /// <param name="camera"></param>
         public override void Draw(Camera camera)
         {
             Matrix worldMatrix = Matrix.CreateTranslation(-2*Vector3.UnitY) * Matrix.CreateRotationZ(MathHelper.Pi) * arrowRotation * Matrix.CreateTranslation(position);

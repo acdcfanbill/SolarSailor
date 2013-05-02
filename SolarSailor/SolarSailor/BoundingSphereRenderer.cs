@@ -13,6 +13,7 @@ namespace SolarSailor
 {
     /// <summary>
     /// Provides a set of methods for rendering BoundingSpheres.
+    /// This was swiped from the internet and then adjusted -bill
     /// </summary>
     public static class BoundingSphereRenderer
     {

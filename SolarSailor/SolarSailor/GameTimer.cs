@@ -14,7 +14,7 @@ namespace SolarSailor
     /// <summary>
     /// GameTimer class. Keeps track of time since you started playing, once you've hit your
     /// max time it sets a boolean that hte game is over.  the model manager checks this to see
-    /// if it should set gameover.
+    /// if it should set gameover. -bill
     /// </summary>
     public class GameTimer
     {
